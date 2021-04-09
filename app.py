@@ -2,19 +2,13 @@ from flask import Flask, request
 from audio_service import AudioService
 
 app = Flask(__name__)
-
-audio_service = AudioService()
-
-
-class Request:
-    def __init__(self, dictionary):
-        self.__dict__ = dictionary
+app.service = AudioService()
 
 
 @app.route("/<string:audio_file_type>/<int:audio_file_id>", methods=['POST'])
-def join_room(audio_file_type, audio_file_id):
-    audio_service.add_song(audio_file_id, request.get_json())
-    return "ddd"
+def create_audio_file(audio_file_type, audio_file_id):
+    app.service.add_audio_file(audio_file_type, audio_file_id, request.get_json())
+    return ""
 
 
 if __name__ == '__main__':
