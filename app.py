@@ -13,8 +13,7 @@ class Request:
 
 @app.route("/<string:audio_file_type>/<int:audio_file_id>", methods=['POST'])
 def join_room(audio_file_type, audio_file_id):
-    r = Request(request.get_json())
-    audio_service.add_song(audio_file_id, r)
+    audio_service.add_song(audio_file_id, request.get_json())
     return "ddd"
 
 
