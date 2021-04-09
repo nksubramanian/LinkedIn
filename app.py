@@ -1,5 +1,5 @@
 from flask import Flask, request
-from audio_service import AudioService
+from audio_service import AudioService, UserInputError
 
 app = Flask(__name__)
 app.service = AudioService()
@@ -7,8 +7,11 @@ app.service = AudioService()
 
 @app.route("/<string:audio_file_type>/<int:audio_file_id>", methods=['POST'])
 def create_audio_file(audio_file_type, audio_file_id):
-    app.service.add_audio_file(audio_file_type, audio_file_id, request.get_json())
-    return ""
+    try:
+        app.service.add_audio_file(audio_file_type, audio_file_id, request.get_json())
+        return ""
+    except UserInputError as error:
+        return error.args[0], 400
 
 
 if __name__ == '__main__':
