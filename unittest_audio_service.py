@@ -1,9 +1,40 @@
 import unittest
 from unittest.mock import MagicMock
 from audio_service import AudioService
+from audio_service import UserInputError
 
+l = [("song", "Name of the song is mandatory", {'namea': 'gh',
+                                                'duration': 45,
+                                                'uploaded_time': 1234}),
+     ("song", "duration has to be integer", {'name': 'gh',
+                                                'duration': 'g45',
+                                                'uploaded_time': 1234}),
+     ]
 
 class AudioServiceTests(unittest.TestCase):
+    def test_add_validation(self):
+        global l
+        for t in l:
+            audioservice = AudioService()
+            audioservice.database.add_song = MagicMock(return_value=None)
+            audioservice.database.add_podcast = MagicMock(return_value=None)
+            audioservice.database.add_audiobook = MagicMock(return_value=None)
+            try:
+                audioservice.add_audio_file(t[0], 3333, t[2])
+                exception_thrown = False
+            except UserInputError as error:
+                print(error.args[0])
+                assert error.args[0] == t[1]
+                exception_thrown = True
+            assert exception_thrown is True
+
+
+
+
+
+
+
+
     def test_add_audio_file(self):
         song_body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date':'wef'}
         podcast_body_data = {'name': 'gh',
