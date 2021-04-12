@@ -48,7 +48,7 @@ class AudioService:
             raise UserInputError("duration has to be a positive integer")
         if len(r['name']) > 100:
             raise UserInputError("Name cannot be greater than 100 characters")
-        return True
+
 
     def assert_podcast_parameters(self, audio_file_type, audio_file_id, r):
         if 'name' not in r.keys():
@@ -73,7 +73,6 @@ class AudioService:
             for member in r['participants']:
                 if len(member) > 100:
                     raise UserInputError("maximum characters allowed for all participants in 100")
-        return True
 
     def assert_audiobook_parameters(self, audio_file_type, audio_file_id, r):
         if 'title' not in r.keys():
