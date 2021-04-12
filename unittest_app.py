@@ -11,4 +11,8 @@ class AppTests(unittest.TestCase):
         response_message = response.stream.response.data.decode("UTF-8")
         assert response_message == "Record added"
         app.service.add_audio_file.assert_called_once()
-        ##assert called with the correct parameter
+        last_call_detail = app.service.add_audio_file.call_args
+        assert last_call_detail.args[0] == "song"
+        assert last_call_detail.args[1] == 83662
+
+
