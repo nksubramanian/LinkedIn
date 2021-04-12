@@ -1,38 +1,37 @@
 import unittest
 from unittest.mock import MagicMock
 from app import app
-
+import audio_service
 
 class AppTests(unittest.TestCase):
+    def test_unsuccesful_creation_song(self):
+        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
+        error_message = "SomeError"
+        app.service.add_audio_file = MagicMock(side_effect=audio_service.UserInputError(error_message))
+        tester = app.test_client(self)
+        response = tester.post("/song/83662", json=body_data)
+        response_message = response.stream.response.data.decode("UTF-8")
+        assert response_message == error_message
+        assert response.status_code == 400
+        self.assert_method_called_once_with_params(self, app.service.add_audio_file, ("song", 83662, body_data))
+
     def test_successful_creation_song(self):
+        body_data = { 'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         app.service.add_audio_file = MagicMock(return_value=None)
         tester = app.test_client(self)
-        response = tester.post("/song/83662", json={
-            'name': 'b', 'duration': 4, 'uploaded_time': 'b'
-        })
+        response = tester.post("/song/83662", json = body_data)
         response_message = response.stream.response.data.decode("UTF-8")
         assert response_message == "Record added"
-        body_data= {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
+        # status code has to be tested (200)
         self.assert_method_called_once_with_params(self, app.service.add_audio_file, ("song", 83662, body_data))
 
     def test_successful_creation_podcast(self):
+        body_data = { 'name': 'gh', 'duration': 45, 'uploaded_time': 1234, 'host': 'abced', "participants": ["ac", "ca"]}
         app.service.add_audio_file = MagicMock(return_value=None)
         tester = app.test_client(self)
-        response = tester.post("/podcast/662", json={
-            'name': 'gh',
-            'duration': 45,
-            'uploaded_time': 1234,
-            'host': 'abced',
-            "participants": ["ac", "ca"]
-        })
+        response = tester.post("/podcast/662", json=body_data)
         response_message = response.stream.response.data.decode("UTF-8")
         assert response_message == "Record added"
-        body_data = {'name': 'gh',
-                     'duration': 45,
-                     'uploaded_time': 1234,
-                     'host': 'abced',
-                     "participants": ["ac", "ca"]
-                    }
         self.assert_method_called_once_with_params(self, app.service.add_audio_file, ("podcast", 662, body_data))
 
     def test_successful_creation_audiobook(self):

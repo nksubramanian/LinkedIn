@@ -13,9 +13,10 @@ class AudioService:
         self.database = database
 
     def add_audio_file(self, audio_file_type, audio_file_id, r):
-        if audio_file_type.lower() == "audiobook" and self.assert_audiobook_parameters(audio_file_type, audio_file_id, r):
+        if audio_file_type.lower() == "audiobook":
+            self.assert_audiobook_parameters(audio_file_type, audio_file_id, r)
             self.database.add_audiobook(audio_file_id, r)
-        if audio_file_type.lower() == "song" and self.assert_song_parameters(audio_file_type, audio_file_id, r):
+        if audio_file_type.lower() == "song" and self.assert_song_parameters(r):
             self.database.add_song(audio_file_id, r)
         if audio_file_type.lower() == "podcast" and self.assert_podcast_parameters(audio_file_type, audio_file_id, r):
             self.database.add_podcast(audio_file_id, r)
@@ -36,7 +37,7 @@ class AudioService:
         if audio_file_type.lower() == "podcast":
             return self.database.delete_podcast(audio_file_id)
 
-    def assert_song_parameters(self, audio_file_type, audio_file_id, r):
+    def assert_song_parameters(self, r):
         if 'name' not in r.keys():
             raise UserInputError("Name of the song is mandatory")
         if 'duration' not in r.keys():
@@ -74,8 +75,6 @@ class AudioService:
                     raise UserInputError("maximum characters allowed for all participants in 100")
         return True
 
-
-
     def assert_audiobook_parameters(self, audio_file_type, audio_file_id, r):
         if 'title' not in r.keys():
             raise UserInputError("Name of the song is mandatory")
@@ -95,7 +94,6 @@ class AudioService:
             raise UserInputError("duration has to be integer")
         if r['duration'] < 0:
             raise UserInputError("duration has to be a positive integer")
-        return True
 
 
 
