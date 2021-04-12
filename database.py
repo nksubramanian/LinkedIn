@@ -1,5 +1,6 @@
 import pymongo
 
+
 class Database:
     def __init__(self, client):
         if client is None:
@@ -13,8 +14,9 @@ class Database:
         self.audiobook_collection = self.mydb["Audiobook"]
 
     def add_song(self, id, data_dictionary):
+        print(type(data_dictionary))
         data_dictionary["_id"] = id
-        x = self.song_collection.insert_one(data_dictionary).inserted_id
+        self.song_collection.insert_one(data_dictionary)
 
     def add_podcast(self, id, data_dictionary):
         data_dictionary["_id"] = id
