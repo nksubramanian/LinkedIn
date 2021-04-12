@@ -14,7 +14,6 @@ def create_audio_file(audio_file_type, audio_file_id):
         return error.args[0], 400
 
 
-
 @app.route("/<string:audio_file_type>/<int:audio_file_id>", methods=['GET'])
 def get_audio_file(audio_file_type, audio_file_id):
     try:
@@ -27,8 +26,7 @@ def get_audio_file(audio_file_type, audio_file_id):
 @app.route("/<string:audio_file_type>/<int:audio_file_id>", methods=['DELETE'])
 def delete_audio_file(audio_file_type, audio_file_id):
     try:
-        x = app.service.delete_file(audio_file_type, audio_file_id)
-        return x
+        return app.service.delete_file(audio_file_type, audio_file_id)
     except UserInputError as error:
         return error.args[0], 400
 
