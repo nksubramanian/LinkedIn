@@ -15,6 +15,27 @@ class AppTests(unittest.TestCase):
         assert response.status_code == 400
         self.assert_method_called_once_with_params(self, app.service.add_audio_file, ("song", 83662, body_data))
 
+    def test_unsuccesful_get(self):
+        error_message = "SomeError"
+        app.service.add_audio_file = MagicMock(side_effect=audio_service.UserInputError(error_message))
+        tester = app.test_client(self)
+        response = tester.post("/song/83662")
+        response_message = response.stream.response.data.decode("UTF-8")
+        assert response_message == error_message
+        assert response.status_code == 400
+        #self.assert_method_called_once_with_params(self, app.service.get_file, ("song", 83662, body_data))
+
+
+    def test_unsuccesful_deletion(self):
+        error_message = "SomeError"
+        app.service.add_audio_file = MagicMock(side_effect=audio_service.UserInputError(error_message))
+        tester = app.test_client(self)
+        response = tester.post("/song/83662")
+        response_message = response.stream.response.data.decode("UTF-8")
+        assert response_message == error_message
+        assert response.status_code == 400
+
+
     def test_successful_creation_song(self):
         body_data = { 'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         app.service.add_audio_file = MagicMock(return_value=None)
