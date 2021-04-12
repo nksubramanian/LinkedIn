@@ -23,8 +23,6 @@ class AppTests(unittest.TestCase):
         response_message = response.stream.response.data.decode("UTF-8")
         assert response_message == error_message
         assert response.status_code == 400
-        #self.assert_method_called_once_with_params(self, app.service.get_file, ("song", 83662, body_data))
-
 
     def test_unsuccesful_deletion(self):
         error_message = "SomeError"
