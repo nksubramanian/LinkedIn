@@ -1,8 +1,11 @@
 import pymongo
 
 class Database:
-    def __init__(self):
-        self.myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+    def __init__(self, client):
+        if client is None:
+            self.myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+        else:
+            self.myclient = client
         # Conection string should come from config
         self.mydb = self.myclient["mydatabase"]
         self.song_collection = self.mydb["Song"]
