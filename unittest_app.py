@@ -41,6 +41,7 @@ class AppTests(unittest.TestCase):
         response = tester.post("/song/83662", json = body_data)
         response_message = response.stream.response.data.decode("UTF-8")
         assert response_message == "Record added"
+        assert response.status_code == 200
         # status code has to be tested (200)
         self.assert_method_called_once_with_params(self, app.service.add_audio_file, ("song", 83662, body_data))
 
@@ -51,6 +52,7 @@ class AppTests(unittest.TestCase):
         response = tester.post("/podcast/662", json=body_data)
         response_message = response.stream.response.data.decode("UTF-8")
         assert response_message == "Record added"
+        assert response.status_code == 200
         self.assert_method_called_once_with_params(self, app.service.add_audio_file, ("podcast", 662, body_data))
 
     def test_successful_creation_audiobook(self):
@@ -60,6 +62,7 @@ class AppTests(unittest.TestCase):
         response = tester.post("/audiobook/66", json=body_data)
         response_message = response.stream.response.data.decode("UTF-8")
         assert response_message == "Record added"
+        assert response.status_code == 200
         self.assert_method_called_once_with_params(self, app.service.add_audio_file, ("audiobook", 66, body_data))
 
     def test_successful_retrieval_song(self):
@@ -69,6 +72,7 @@ class AppTests(unittest.TestCase):
         response = tester.get("/song/66")
         response_message = response.stream.response.data.decode("UTF-8")
         assert eval(response_message) == body_data
+        assert response.status_code == 200
         self.assert_method_called_once_with_params(self, app.service.get_file, ("song", 66))
 
     def test_successful_retrieval_podcast(self):
@@ -78,6 +82,7 @@ class AppTests(unittest.TestCase):
         response = tester.get("/podcast/66")
         response_message = response.stream.response.data.decode("UTF-8")
         assert eval(response_message) == body_data
+        assert response.status_code == 200
         self.assert_method_called_once_with_params(self, app.service.get_file, ("podcast", 66))
 
 
@@ -88,6 +93,7 @@ class AppTests(unittest.TestCase):
         response = tester.get("/audiobook/66")
         response_message = response.stream.response.data.decode("UTF-8")
         assert eval(response_message) == body_data
+        assert response.status_code == 200
         self.assert_method_called_once_with_params(self, app.service.get_file, ("audiobook", 66))
 
     def test_successful_deletion_song(self):
@@ -96,6 +102,7 @@ class AppTests(unittest.TestCase):
         response = tester.delete("/song/66")
         response_message = response.stream.response.data.decode("UTF-8")
         assert eval(response_message) == {"duration": 4, "name": "b", "uploaded_time": "b"}
+        assert response.status_code == 200
         self.assert_method_called_once_with_params(self, app.service.delete_file, ("song", 66))
 
     @staticmethod

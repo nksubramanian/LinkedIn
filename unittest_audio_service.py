@@ -3,12 +3,9 @@ from unittest.mock import MagicMock
 from audio_service import AudioService
 from audio_service import UserInputError
 
-l = [("song", "Name of the song is mandatory", {'namea': 'gh',
-                                                'duration': 45,
-                                                'uploaded_time': 1234}),
-     ("song", "duration has to be integer", {'name': 'gh',
-                                                'duration': 'g45',
-                                                'uploaded_time': 1234}),
+l = [
+    ("song", "Name of the song is mandatory", {'namea': 'gh','duration': 45, 'uploaded_time': 1234}),
+    ("song", "duration has to be integer", {'name': 'gh', 'duration': 'g45', 'uploaded_time': 1234}),
      ]
 
 class AudioServiceTests(unittest.TestCase):

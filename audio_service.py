@@ -17,6 +17,7 @@ class AudioService:
         if audio_file_type.lower() == "song":
             self.assert_song_parameters(audio_file_type, audio_file_id, r)
             self.database.add_song(audio_file_id, r)
+            print(self.database.get_count(audio_file_type, audio_file_id))
         if audio_file_type.lower() == "podcast":
             self.assert_podcast_parameters(audio_file_type, audio_file_id, r)
             self.database.add_podcast(audio_file_id, r)
@@ -40,16 +41,18 @@ class AudioService:
     def assert_song_parameters(self, audio_file_type, audio_file_id, r):
         if type(audio_file_id) is not int:
             raise UserInputError("Audio file Id has to be integer")
+        if self.database.get_count(audio_file_type, audio_file_id) != 0:
+            raise UserInputError("Id already exists")
         if 'name' not in r.keys():
             raise UserInputError("Name of the song is mandatory")
+        if len(r['name']) > 100:
+            raise UserInputError("Name cannot be greater than 100 characters")
         if 'duration' not in r.keys():
             raise UserInputError("Duration of the song is mandatory")
         if type(r['duration']) != int:
             raise UserInputError("duration has to be integer")
         if r['duration'] < 0:
             raise UserInputError("duration has to be a positive integer")
-        if len(r['name']) > 100:
-            raise UserInputError("Name cannot be greater than 100 characters")
         if 'uploaded_time' not in r.keys():
             raise UserInputError("date is mandatory")
         if type(r['uploaded_time']) != str:

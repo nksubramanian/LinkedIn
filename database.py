@@ -13,6 +13,15 @@ class Database:
         self.podcast_collection = self.mydb["Podcast"]
         self.audiobook_collection = self.mydb["Audiobook"]
 
+    def get_count(self, audio_file_type, audio_file_id):
+        if audio_file_type == "song":
+            return self.song_collection.count_documents({'_id': audio_file_id})
+        if audio_file_type == "podcast":
+            return self.podcast_collection.count_documents({'_id': audio_file_id})
+        if audio_file_type == "audiobook":
+            return self.audiobook_collection.count_documents({'_id': audio_file_id})
+
+
     def add_song(self, id, data_dictionary):
         print(type(data_dictionary))
         data_dictionary["_id"] = id
