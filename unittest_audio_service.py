@@ -4,8 +4,16 @@ from audio_service import AudioService
 from audio_service import UserInputError
 
 l = [
-    ("song", "Name of the song is mandatory", {'namea': 'gh','duration': 45, 'uploaded_time': 1234}),
-    ("song", "duration has to be integer", {'name': 'gh', 'duration': 'g45', 'uploaded_time': 1234}),
+     ("song", "Audio file Id has to be integer", {"name": "b", "duration": 4, "uploaded_time": "2034-06-01 01:10:20"}, "s"),
+     ("song", "Name of the song is mandatory", {'namea': 'gh', 'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"}, 4),
+     ("song", "Name cannot be greater than 100 characters", {'name': 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz',
+                                                             'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"}, 4),
+    ("song", "Duration of the song is mandatory", {'name': 'gh', 'ruration': 45, 'uploaded_time': "2034-06-01 01:10:20"}, 4),
+    ("song", "duration has to be integer", {'name': 'gh', 'duration': '4e5', 'uploaded_time': "2034-06-01 01:10:20"}, 4),
+    ("song", "duration has to be a positive integer", {'name': 'gh', 'duration': -45, 'uploaded_time': "2034-06-01 01:10:20"}, 4),
+    ("song", "uploaded_time is mandatory", {'name': 'gh', 'duration': 45, '1uploaded_time': "2034-06-01 01:10:20"}, 4),
+    ("song", "date needs to be in string format", {'name': 'gh', 'duration': 45, 'uploaded_time':  [2032, 3, 4]}, 4),
+    ("song", "duration has to be a positive integer", {'name': 'gh', 'duration': -45, 'uploaded_time': "2012-06-01 01:10:20"}, 4),
      ]
 
 class AudioServiceTests(unittest.TestCase):
@@ -17,10 +25,10 @@ class AudioServiceTests(unittest.TestCase):
             audioservice.database.add_podcast = MagicMock(return_value=None)
             audioservice.database.add_audiobook = MagicMock(return_value=None)
             try:
-                audioservice.add_audio_file(t[0], 3333, t[2])
+                audioservice.add_audio_file(t[0], t[3], t[2])
                 exception_thrown = False
             except UserInputError as error:
-                print(error.args[0])
+                print(type(error.args[0]))
                 assert error.args[0] == t[1]
                 exception_thrown = True
             assert exception_thrown is True

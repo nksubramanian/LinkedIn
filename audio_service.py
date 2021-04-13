@@ -54,7 +54,7 @@ class AudioService:
         if r['duration'] < 0:
             raise UserInputError("duration has to be a positive integer")
         if 'uploaded_time' not in r.keys():
-            raise UserInputError("date is mandatory")
+            raise UserInputError("uploaded_time is mandatory")
         if type(r['uploaded_time']) != str:
             raise UserInputError("date needs to be in string format")
         if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
