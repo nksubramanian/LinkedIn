@@ -33,11 +33,8 @@ class Database:
         return {"audiobook":"audiobook does not exists"}
 
     def get_song(self, audio_file_id):
-        for x in self.song_collection.find():
-            if x["_id"] == audio_file_id:
-                print("I am here")
-                return x
-        return {"song":"does not exists"}
+        return self.song_collection.find_one({'_id': audio_file_id})
+        #return {"song":"does not exists"}
 
     def get_podcast(self, audio_file_id):
         for x in self.audiobook_collection.find():
