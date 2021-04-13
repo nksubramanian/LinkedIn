@@ -54,9 +54,9 @@ class Database:
         return {"song": "song does not exists"}
 
     def delete_podcast(self, audio_file_id):
-        for x in self.song_collection.find():
+        for x in self.podcast_collection.find():
             if x["_id"] == audio_file_id:
-                self.song_collection.remove({'_id': audio_file_id})
+                self.podcast_collection.remove({'_id': audio_file_id})
                 return {"podcast": "podcast is deleted"}
         return {"podcast": "podcast does not exists"}
 
