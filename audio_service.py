@@ -12,13 +12,13 @@ class AudioService:
     def add_audio_file(self, audio_file_type, audio_file_id, r):
         if audio_file_type.lower() == "audiobook":
             self.assert_audiobook_parameters(audio_file_type, audio_file_id, r)
-            self.database.add_audiobook(audio_file_type, audio_file_id, r)
+            self.database.add_audiobook(audio_file_id, r)
         if audio_file_type.lower() == "song":
             self.assert_song_parameters(audio_file_type, audio_file_id, r)
             self.database.add_song(audio_file_id, r)
         if audio_file_type.lower() == "podcast":
             self.assert_podcast_parameters(audio_file_type, audio_file_id, r)
-            self.database.add_podcast(audio_file_type,audio_file_id, r)
+            self.database.add_podcast(audio_file_id, r)
 
     def get_file(self, audio_file_type, audio_file_id):
         if audio_file_type.lower() == "audiobook":
