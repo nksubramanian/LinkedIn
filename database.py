@@ -27,20 +27,16 @@ class Database:
         x = self.audiobook_collection.insert_one(data_dictionary).inserted_id
 
     def get_audiobook(self, audio_file_id):
-        for x in self.audiobook_collection.find():
-            if x["_id"] == audio_file_id:
-                return x
-        return {"audiobook":"audiobook does not exists"}
+        return self.audiobook_collection.find_one({'_id': audio_file_id})
+        #return {"audiobook":"audiobook does not exists"}
 
     def get_song(self, audio_file_id):
         return self.song_collection.find_one({'_id': audio_file_id})
         #return {"song":"does not exists"}
 
     def get_podcast(self, audio_file_id):
-        for x in self.audiobook_collection.find():
-            if x["_id"] == audio_file_id:
-                return x
-        return {"podcast": "does not exists"}
+        return self.podcast_collection.find_one({'_id': audio_file_id})
+        #return {"podcast": "does not exists"}
 
     def delete_audiobook(self, audio_file_id):
         for x in self.audiobook_collection.find():
