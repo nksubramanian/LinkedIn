@@ -1,4 +1,5 @@
 from database import Database
+from datetime import datetime, date
 
 class UserInputError(Exception):
     pass
@@ -49,8 +50,13 @@ class AudioService:
             raise UserInputError("duration has to be a positive integer")
         if len(r['name']) > 100:
             raise UserInputError("Name cannot be greater than 100 characters")
-        if 'date' not in r.keys():
+        if 'uploaded_time' not in r.keys():
             raise UserInputError("date is mandatory")
+        if type(r['uploaded_time']) != str:
+            raise UserInputError("date needs to be in string format")
+        if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
+            raise UserInputError("date cannot be in the past")
+
 
 
     def assert_podcast_parameters(self, audio_file_type, audio_file_id, r):
@@ -76,6 +82,12 @@ class AudioService:
             for member in r['participants']:
                 if len(member) > 100:
                     raise UserInputError("maximum characters allowed for all participants in 100")
+        if 'uploaded_time' not in r.keys():
+            raise UserInputError("uploaded_time is mandatory")
+        if type(r['uploaded_time']) != str:
+            raise UserInputError("uploaded_time needs to be in string format")
+        if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
+            raise UserInputError("uploaded_time cannot be in the past")
 
     def assert_audiobook_parameters(self, audio_file_type, audio_file_id, r):
         if 'title' not in r.keys():
@@ -97,6 +109,12 @@ class AudioService:
             raise UserInputError("duration has to be integer")
         if r['duration'] < 0:
             raise UserInputError("duration has to be a positive integer")
+        if 'uploaded_time' not in r.keys():
+            raise UserInputError("date is mandatory")
+        if type(r['uploaded_time']) != str:
+            raise UserInputError("date needs to be in string format")
+        if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
+            raise UserInputError("date cannot be in the past")
 
 
 
