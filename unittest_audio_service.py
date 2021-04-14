@@ -21,9 +21,9 @@ class AudioServiceTests(unittest.TestCase):
         global l
         for t in l:
             audioservice = AudioService()
-            audioservice.database.add_song = MagicMock(return_value=None)
-            audioservice.database.add_podcast = MagicMock(return_value=None)
-            audioservice.database.add_audiobook = MagicMock(return_value=None)
+            audioservice.persistence_gateway.add_song = MagicMock(return_value=None)
+            audioservice.persistence_gateway.add_podcast = MagicMock(return_value=None)
+            audioservice.persistence_gateway.add_audiobook = MagicMock(return_value=None)
             try:
                 audioservice.add_audio_file(t[0], t[3], t[2])
                 exception_thrown = False
@@ -49,9 +49,9 @@ class AudioServiceTests(unittest.TestCase):
                              "participants": ["ac", "ca"]}
         audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": '2031-04-14 14:41:32'}
         audioservice = AudioService()
-        audioservice.database.add_song = MagicMock(return_value=None)
-        audioservice.database.add_podcast = MagicMock(return_value=None)
-        audioservice.database.add_audiobook = MagicMock(return_value=None)
+        audioservice.persistence_gateway.add_song = MagicMock(return_value=None)
+        audioservice.persistence_gateway.add_podcast = MagicMock(return_value=None)
+        audioservice.persistence_gateway.add_audiobook = MagicMock(return_value=None)
         assert audioservice.add_audio_file("song", 9999, song_body_data) is None
         assert audioservice.add_audio_file("podcast", 9999, podcast_body_data) is None
         assert audioservice.add_audio_file("audiobook", 9999, audiobook_body_data) is None
@@ -66,9 +66,9 @@ class AudioServiceTests(unittest.TestCase):
                              "participants": ["ac", "ca"]}
         audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": 34}
         audioservice = AudioService()
-        audioservice.database.get_song = MagicMock(return_value=song_body_data)
-        audioservice.database.get_podcast = MagicMock(return_value=podcast_body_data)
-        audioservice.database.get_audiobook = MagicMock(return_value=audiobook_body_data )
+        audioservice.persistence_gateway.get_song = MagicMock(return_value=song_body_data)
+        audioservice.persistence_gateway.get_podcast = MagicMock(return_value=podcast_body_data)
+        audioservice.persistence_gateway.get_audiobook = MagicMock(return_value=audiobook_body_data)
         assert audioservice.get_file("song", 9999) == song_body_data
         assert audioservice.get_file("podcast", 9999) == podcast_body_data
         assert audioservice.get_file("audiobook", 9999) == audiobook_body_data
@@ -83,9 +83,9 @@ class AudioServiceTests(unittest.TestCase):
                              "participants": ["ac", "ca"]}
         audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": 34}
         audioservice = AudioService()
-        audioservice.database.delete_song = MagicMock(return_value=song_body_data)
-        audioservice.database.delete_podcast = MagicMock(return_value=podcast_body_data)
-        audioservice.database.delete_audiobook = MagicMock(return_value=audiobook_body_data )
+        audioservice.persistence_gateway.delete_song = MagicMock(return_value=song_body_data)
+        audioservice.persistence_gateway.delete_podcast = MagicMock(return_value=podcast_body_data)
+        audioservice.persistence_gateway.delete_audiobook = MagicMock(return_value=audiobook_body_data)
         assert audioservice.delete_file("song", 9999) == song_body_data
         assert audioservice.delete_file("podcast", 9999) == podcast_body_data
         assert audioservice.delete_file("audiobook", 9999) == audiobook_body_data

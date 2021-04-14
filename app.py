@@ -1,9 +1,11 @@
 from flask import Flask, request
 from audio_service import AudioService
 from business_errors import UserInputError
+from persistance_gateway import PersistenceGateway
+from pymongo import MongoClient
 
 app = Flask(__name__)
-app.service = AudioService()
+app.service = AudioService(PersistenceGateway(MongoClient("mongodb://localhost:27017/")))
 
 
 @app.route("/<string:audio_file_type>/<int:audio_file_id>", methods=['POST'])
