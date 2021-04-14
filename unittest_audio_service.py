@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from audio_service import AudioService
+from audio_service import AudioFileService
 from business_errors import UserInputError
 
 l = [
@@ -20,7 +20,7 @@ class AudioServiceTests(unittest.TestCase):
     def test_add_validation(self):
         global l
         for t in l:
-            audioservice = AudioService()
+            audioservice = AudioFileService()
             audioservice.persistence_gateway.add_song = MagicMock(return_value=None)
             audioservice.persistence_gateway.add_podcast = MagicMock(return_value=None)
             audioservice.persistence_gateway.add_audiobook = MagicMock(return_value=None)
@@ -48,7 +48,7 @@ class AudioServiceTests(unittest.TestCase):
                              'host': 'abced',
                              "participants": ["ac", "ca"]}
         audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": '2031-04-14 14:41:32'}
-        audioservice = AudioService()
+        audioservice = AudioFileService()
         audioservice.persistence_gateway.add_song = MagicMock(return_value=None)
         audioservice.persistence_gateway.add_podcast = MagicMock(return_value=None)
         audioservice.persistence_gateway.add_audiobook = MagicMock(return_value=None)
@@ -65,7 +65,7 @@ class AudioServiceTests(unittest.TestCase):
                              'host': 'abced',
                              "participants": ["ac", "ca"]}
         audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": 34}
-        audioservice = AudioService()
+        audioservice = AudioFileService()
         audioservice.persistence_gateway.get_song = MagicMock(return_value=song_body_data)
         audioservice.persistence_gateway.get_podcast = MagicMock(return_value=podcast_body_data)
         audioservice.persistence_gateway.get_audiobook = MagicMock(return_value=audiobook_body_data)
@@ -82,7 +82,7 @@ class AudioServiceTests(unittest.TestCase):
                              'host': 'abced',
                              "participants": ["ac", "ca"]}
         audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": 34}
-        audioservice = AudioService()
+        audioservice = AudioFileService()
         audioservice.persistence_gateway.delete_song = MagicMock(return_value=song_body_data)
         audioservice.persistence_gateway.delete_podcast = MagicMock(return_value=podcast_body_data)
         audioservice.persistence_gateway.delete_audiobook = MagicMock(return_value=audiobook_body_data)

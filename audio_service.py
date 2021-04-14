@@ -3,7 +3,7 @@ from business_errors import UserInputError
 from persistance_gateway import PersistenceGateway, UnableToInsertDueToDuplicateKeyError, ItemNotFound
 
 
-class AudioService:
+class AudioFileService:
 
     def __init__(self, persistence_gateway):
         self.persistence_gateway = persistence_gateway
