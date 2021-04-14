@@ -117,19 +117,21 @@ class AudioService:
     def __init__(self):
         self.database = Database(None)
 
-    def add_audio_file(self, audio_file_type, audio_file_id, creation_request):
+    def create_audio_file(self, audio_file_type, database):
         audio_file_type = audio_file_type.lower()
         if audio_file_type == "audiobook":
-            audio_file = AudioBookAudioFile(self.database)
-            audio_file.add_audio_file(audio_file_id, creation_request)
+            return AudioBookAudioFile(self.database)
         elif audio_file_type == "song":
-            audio_file = SongAudioFile(self.database)
-            audio_file.add_audio_file(audio_file_id, creation_request)
+            return SongAudioFile(self.database)
         elif audio_file_type == "podcast":
-            audio_file = PodcastAudioFile(self.database)
-            audio_file.add_audio_file(audio_file_id, creation_request)
+            return PodcastAudioFile(self.database)
         else:
             raise UserInputError('The audio file type is not understood')
+
+    def add_audio_file(self, audio_file_type, audio_file_id, creation_request):
+        audio_file = self.create_audio_file(audio_file_type, self.database)
+        audio_file.add_audio_file(audio_file_id, creation_request)
+
 
     def get_file(self, audio_file_type, audio_file_id):
         if audio_file_type.lower() == "audiobook":
