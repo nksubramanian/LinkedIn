@@ -1,5 +1,8 @@
 import pymongo
 
+class UnableToInsertDueToDuplicateKeyError(Exception):
+    pass
+
 
 class Database:
     def __init__(self, client):
@@ -13,6 +16,7 @@ class Database:
         self.podcast_collection = self.mydb["Podcast"]
         self.audiobook_collection = self.mydb["Audiobook"]
 
+    #delete
     def get_count(self, audio_file_type, audio_file_id):
         if audio_file_type == "song":
             return self.song_collection.count_documents({'_id': audio_file_id})
@@ -23,17 +27,25 @@ class Database:
 
 
     def add_song(self, id, data_dictionary):
-        print(type(data_dictionary))
-        data_dictionary["_id"] = id
-        self.song_collection.insert_one(data_dictionary)
+        try:
+            data_dictionary["_id"] = id
+            self.song_collection.insert_one(data_dictionary)
+        except pymongo.errors.DuplicateKeyError as error:
+            raise UnableToInsertDueToDuplicateKeyError("Id already exists")
 
     def add_podcast(self, id, data_dictionary):
-        data_dictionary["_id"] = id
-        x = self.podcast_collection.insert_one(data_dictionary).inserted_id
+        try:
+            data_dictionary["_id"] = id
+            self.podcast_collection.insert_one(data_dictionary)
+        except pymongo.errors.DuplicateKeyError as error:
+            raise UnableToInsertDueToDuplicateKeyError("Id already exists")
 
     def add_audiobook(self, id, data_dictionary):
-        data_dictionary["_id"] = id
-        x = self.audiobook_collection.insert_one(data_dictionary).inserted_id
+        try:
+            data_dictionary["_id"] = id
+            self.audiobook_collection.insert_one(data_dictionary)
+        except pymongo.errors.DuplicateKeyError as error:
+            raise UnableToInsertDueToDuplicateKeyError("Id already exists")
 
     def get_audiobook(self, audio_file_id):
         return self.audiobook_collection.find_one({'_id': audio_file_id})
