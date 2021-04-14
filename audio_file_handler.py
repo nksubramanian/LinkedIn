@@ -1,17 +1,17 @@
 from datetime import datetime
-
 from business_errors import UserInputError
 
 
-class AudioBookAudioFile:
-    def __init__(self, database):
-        self.database = database
+class AudioBookHandler:
+    def __init__(self, persistence_gateway):
+        self.persistence_gateway = persistence_gateway
+        self.collection = "audiobook"
 
     def add_audio_file(self, audio_file_id, creation_request):
-        self.assert_audiobook_parameters(audio_file_id, creation_request)
-        self.database.add_audiobook(audio_file_id, creation_request)
+        self.__assert_audiobook_parameters(audio_file_id, creation_request)
+        self.persistence_gateway.add(self.collection, audio_file_id, creation_request)
 
-    def assert_audiobook_parameters(self, audio_file_id, r):
+    def __assert_audiobook_parameters(self, audio_file_id, r):
         #if title is empty
         if 'title' not in r.keys():
             raise UserInputError("Name of the song is mandatory")
@@ -40,20 +40,23 @@ class AudioBookAudioFile:
             raise UserInputError("date cannot be in the past")
 
     def get_audio_file(self, audio_file_id):
-        return self.database.get_audiobook(audio_file_id)
+        return self.persistence_gateway.get(self.collection, audio_file_id)
 
     def delete_audio_file(self, audio_file_id):
-        return self.database.delete_audiobook(audio_file_id)
+        return self.persistence_gateway.delete(self.collection, audio_file_id)
 
-class SongAudioFile:
-    def __init__(self, database):
-        self.database = database
+
+class SongHandler:
+    def __init__(self, persistence_gateway):
+        self.persistence_gateway = persistence_gateway
+        self.collection = "song"
 
     def add_audio_file(self, audio_file_id, creation_request):
-        self.assert_song_parameters(audio_file_id, creation_request)
-        self.database.add_song(audio_file_id, creation_request)
+        self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
+        self.persistence_gateway.add(self.collection, audio_file_id, creation_request)
 
-    def assert_song_parameters(self, audio_file_id, r):
+    @staticmethod
+    def __assert_creation_parameters_are_correct(audio_file_id, r):
         if type(audio_file_id) is not int:
             raise UserInputError("Audio file Id has to be integer")
         if 'name' not in r.keys():
@@ -74,20 +77,23 @@ class SongAudioFile:
             raise UserInputError("date cannot be in the past")
 
     def get_audio_file(self, audio_file_id):
-        return self.database.get_song(audio_file_id)
+        return self.persistence_gateway.get(self.collection, audio_file_id)
 
     def delete_audio_file(self, audio_file_id):
-        return self.database.delete_song(audio_file_id)
+        return self.persistence_gateway.delete(self.collection, audio_file_id)
 
-class PodcastAudioFile:
-    def __init__(self, database):
-        self.database = database
+
+class PodcastHandler:
+    def __init__(self, persistence_gateway):
+        self.persistence_gateway = persistence_gateway
+        self.collection = 'podcast'
 
     def add_audio_file(self, audio_file_id, creation_request):
-        self.assert_podcast_parameters(audio_file_id, creation_request)
-        self.database.add_podcast(audio_file_id, creation_request)
+        self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
+        self.persistence_gateway.add(self.collection, audio_file_id, creation_request)
 
-    def assert_podcast_parameters(self, audio_file_id, r):
+    @staticmethod
+    def __assert_creation_parameters_are_correct(audio_file_id, r):
         if 'name' not in r.keys():
             raise UserInputError("Name of the song is mandatory")
         if len(r['name']) > 100:
@@ -118,7 +124,7 @@ class PodcastAudioFile:
             raise UserInputError("uploaded_time cannot be in the past")
 
     def get_audio_file(self, audio_file_id):
-        return self.database.get_podcast(audio_file_id)
+        return self.persistence_gateway.get(self.collection, audio_file_id)
 
     def delete_audio_file(self, audio_file_id):
-        return self.database.delete_podcast(audio_file_id)
+        return self.persistence_gateway.delete(self.collection, audio_file_id)

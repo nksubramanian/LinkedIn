@@ -1,21 +1,22 @@
-from audio_file import AudioBookAudioFile, SongAudioFile, PodcastAudioFile
+from audio_file_handler import AudioBookHandler, SongHandler, PodcastHandler
 from business_errors import UserInputError
-from database import Database, UnableToInsertDueToDuplicateKeyError
+from database import UnableToInsertDueToDuplicateKeyError
+from persistance_gateway import PersistanceGateway
 
 
 class AudioService:
 
     def __init__(self):
-        self.database = Database(None)
+        self.database = PersistanceGateway(None)
 
     def __create_audio_file_handler(self, audio_file_type, database):
         audio_file_type = audio_file_type.lower()
         if audio_file_type == "audiobook":
-            return AudioBookAudioFile(self.database)
+            return AudioBookHandler(self.database)
         if audio_file_type == "song":
-            return SongAudioFile(self.database)
+            return SongHandler(self.database)
         if audio_file_type == "podcast":
-            return PodcastAudioFile(self.database)
+            return PodcastHandler(self.database)
         else:
             raise UserInputError('The audio file type is not understood')
 
