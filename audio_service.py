@@ -1,6 +1,7 @@
 from database import Database
 from datetime import datetime, date
 
+
 class UserInputError(Exception):
     pass
 
