@@ -33,7 +33,7 @@ class AudioService:
 
     def delete_file(self, audio_file_type, audio_file_id):
         audio_file_handler = self.__create_audio_file_handler(audio_file_type, self.database)
-        return audio_file_handler.delete_audio_file(audio_file_id)
+        audio_file_handler.delete_audio_file(audio_file_id)
 
 
 

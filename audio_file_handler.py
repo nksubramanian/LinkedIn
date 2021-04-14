@@ -43,7 +43,7 @@ class AudioBookHandler:
         return self.persistence_gateway.get(self.collection, audio_file_id)
 
     def delete_audio_file(self, audio_file_id):
-        return self.persistence_gateway.delete(self.collection, audio_file_id)
+        self.persistence_gateway.delete(self.collection, audio_file_id)
 
 
 class SongHandler:
