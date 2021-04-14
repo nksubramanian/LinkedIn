@@ -39,6 +39,9 @@ class AudioBookAudioFile:
         if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
             raise UserInputError("date cannot be in the past")
 
+    def get_audio_file(self, audio_file_id):
+        return self.database.get_audiobook(audio_file_id)
+
 
 class SongAudioFile:
     def __init__(self, database):
@@ -67,6 +70,9 @@ class SongAudioFile:
             raise UserInputError("date needs to be in string format")
         if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
             raise UserInputError("date cannot be in the past")
+
+    def get_audio_file(self, audio_file_id):
+        return self.database.get_song(audio_file_id)
 
 
 class PodcastAudioFile:
@@ -106,3 +112,6 @@ class PodcastAudioFile:
             raise UserInputError("uploaded_time needs to be in string format")
         if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
             raise UserInputError("uploaded_time cannot be in the past")
+
+    def get_audio_file(self, audio_file_id):
+        return self.database.get_podcast(audio_file_id)
