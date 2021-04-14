@@ -29,12 +29,8 @@ class AudioService:
         return audio_file.get_audio_file(audio_file_id)
 
     def delete_file(self, audio_file_type, audio_file_id):
-        if audio_file_type.lower() == "audiobook":
-            return self.database.delete_audiobook(audio_file_id)
-        if audio_file_type.lower() == "song":
-            return self.database.delete_song(audio_file_id)
-        if audio_file_type.lower() == "podcast":
-            return self.database.delete_podcast(audio_file_id)
+        audio_file = self.__create_audio_file(audio_file_type, self.database)
+        return audio_file.delete_audio_file(audio_file_id)
 
 
 

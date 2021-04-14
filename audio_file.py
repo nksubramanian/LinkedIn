@@ -42,6 +42,8 @@ class AudioBookAudioFile:
     def get_audio_file(self, audio_file_id):
         return self.database.get_audiobook(audio_file_id)
 
+    def delete_audio_file(self, audio_file_id):
+        return self.database.delete_audiobook(audio_file_id)
 
 class SongAudioFile:
     def __init__(self, database):
@@ -74,6 +76,8 @@ class SongAudioFile:
     def get_audio_file(self, audio_file_id):
         return self.database.get_song(audio_file_id)
 
+    def delete_audio_file(self, audio_file_id):
+        return self.database.delete_song(audio_file_id)
 
 class PodcastAudioFile:
     def __init__(self, database):
@@ -115,3 +119,6 @@ class PodcastAudioFile:
 
     def get_audio_file(self, audio_file_id):
         return self.database.get_podcast(audio_file_id)
+
+    def delete_audio_file(self, audio_file_id):
+        return self.database.delete_podcast(audio_file_id)
