@@ -25,9 +25,15 @@ class PersistanceGateway:
         return self.mydb[collection].find_one({'_id': audio_file_id})
 
     def delete(self, collection, audio_file_id):
-        #when does not exists throw error
-        self.mydb[collection].remove({'_id': audio_file_id})
+        result = self.mydb[collection].delete_one({'_id': audio_file_id})
+        if result.deleted_count == 0:
+            raise ItemToDeleteNotFound()
 
 
 class UnableToInsertDueToDuplicateKeyError(Exception):
     pass
+
+
+class ItemToDeleteNotFound(Exception):
+    pass
+

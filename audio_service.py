@@ -1,6 +1,6 @@
 from audio_file_handler import AudioBookHandler, SongHandler, PodcastHandler
 from business_errors import UserInputError
-from persistance_gateway import PersistanceGateway, UnableToInsertDueToDuplicateKeyError
+from persistance_gateway import PersistanceGateway, UnableToInsertDueToDuplicateKeyError, ItemToDeleteNotFound
 
 
 class AudioService:
@@ -32,7 +32,12 @@ class AudioService:
 
     def delete_file(self, audio_file_type, audio_file_id):
         audio_file_handler = self.__create_audio_file_handler(audio_file_type, self.database)
-        audio_file_handler.delete_audio_file(audio_file_id)
+        try:
+            audio_file_handler.delete_audio_file(audio_file_id)
+        except ItemToDeleteNotFound as error:
+            raise UserInputError("Item to be deleted is not found")
+
+
 
 
 
