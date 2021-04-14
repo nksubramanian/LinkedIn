@@ -16,12 +16,11 @@ Update api (PUT)
     30 mins - Controller unit tests
     30 mins - database unit tests
 
-Get should not return _id. this should return id
-    30 mins
-
 Postman collection for update
     5 mins
 
+Postman collection for get all
+    5 mins
 
 Business unit tests
     Song creation parameters

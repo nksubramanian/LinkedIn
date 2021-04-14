@@ -20,6 +20,7 @@ class AppTests(unittest.TestCase):
         collection_name = 'collection_name'
         persistence_gateway = PersistenceGateway(client)
         client.mydatabase[collection_name].insert_one(body_data)
+        body_data['id'] = body_data.pop('_id')
         assert body_data == persistence_gateway.get(collection_name, 56)
 
     def test_successful_delete_method_db(self):

@@ -15,9 +15,10 @@ class PersistenceGateway:
 
     def get(self, collection, audio_file_id):
         x = self.mydb[collection].find_one({'_id': audio_file_id})
-        if x is not None:
-            return x
-        raise ItemNotFound()
+        if x is None:
+            raise ItemNotFound()
+        x['id'] = x.pop('_id')
+        return x
 
     def delete(self, collection, audio_file_id):
         result = self.mydb[collection].delete_one({'_id': audio_file_id})
