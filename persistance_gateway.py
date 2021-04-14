@@ -21,19 +21,20 @@ class PersistanceGateway:
             raise UnableToInsertDueToDuplicateKeyError("Id already exists")
 
     def get(self, collection, audio_file_id):
-        #when does not exits throw error
-        return self.mydb[collection].find_one({'_id': audio_file_id})
+        x = self.mydb[collection].find_one({'_id': audio_file_id})
+        if x is not None:
+            return x
+        raise ItemNotFound()
 
     def delete(self, collection, audio_file_id):
         result = self.mydb[collection].delete_one({'_id': audio_file_id})
         if result.deleted_count == 0:
-            raise ItemToDeleteNotFound()
+            raise ItemNotFound()
 
 
 class UnableToInsertDueToDuplicateKeyError(Exception):
     pass
 
 
-class ItemToDeleteNotFound(Exception):
+class ItemNotFound(Exception):
     pass
-
