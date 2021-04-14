@@ -1,7 +1,5 @@
 import pymongo
 
-from database import UnableToInsertDueToDuplicateKeyError
-
 
 class PersistanceGateway:
     def __init__(self, client):
@@ -29,3 +27,7 @@ class PersistanceGateway:
     def delete(self, collection, audio_file_id):
         #when does not exists throw error
         self.mydb[collection].remove({'_id': audio_file_id})
+
+
+class UnableToInsertDueToDuplicateKeyError(Exception):
+    pass

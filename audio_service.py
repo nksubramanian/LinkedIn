@@ -1,7 +1,6 @@
 from audio_file_handler import AudioBookHandler, SongHandler, PodcastHandler
 from business_errors import UserInputError
-from database import UnableToInsertDueToDuplicateKeyError
-from persistance_gateway import PersistanceGateway
+from persistance_gateway import PersistanceGateway, UnableToInsertDueToDuplicateKeyError
 
 
 class AudioService:
