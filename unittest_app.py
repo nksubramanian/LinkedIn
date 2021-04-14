@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 import unittest_helper
 import business_errors
-from app import app
+from app import create_app
 from audio_service import AudioFileService
 
 
@@ -12,7 +12,7 @@ class AppTests(unittest.TestCase):
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         error_message = "SomeError"
         for scenario in scenarios:
-            app.service = AudioFileService(None)
+            app = create_app(AudioFileService(None))
             app.service.add_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
             tester = app.test_client(self)
             response = tester.post(f"/{scenario}/83662", json=body_data)
@@ -26,7 +26,7 @@ class AppTests(unittest.TestCase):
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         error_message = "SomeError"
         for scenario in scenarios:
-            app.service = AudioFileService(None)
+            app = create_app(AudioFileService(None))
             app.service.add_audio_file = MagicMock(side_effect=Exception(error_message))
             tester = app.test_client(self)
             response = tester.post(f"/{scenario}/83662", json=body_data)
@@ -39,7 +39,7 @@ class AppTests(unittest.TestCase):
         scenarios = ["song", "podcast", "audiobook"]
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         for scenario in scenarios:
-            app.service = AudioFileService(None)
+            app = create_app(AudioFileService(None))
             app.service.add_audio_file = MagicMock(return_value=None)
             tester = app.test_client(self)
             response = tester.post(f"/{scenario}/83662", json = body_data)
@@ -52,7 +52,7 @@ class AppTests(unittest.TestCase):
         scenarios = ["song", "podcast", "audiobook"]
         error_message = "SomeError"
         for scenario in scenarios:
-            app.service = AudioFileService(None)
+            app = create_app(AudioFileService(None))
             app.service.get_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
             tester = app.test_client(self)
             response = tester.get(f"/{scenario}/83662")
@@ -64,7 +64,7 @@ class AppTests(unittest.TestCase):
         scenarios = ["song", "podcast", "audiobook"]
         error_message = "SomeError"
         for scenario in scenarios:
-            app.service = AudioFileService(None)
+            app = create_app(AudioFileService(None))
             app.service.get_file = MagicMock(side_effect=Exception(error_message))
             tester = app.test_client(self)
             response = tester.get(f"/{scenario}/83662")
@@ -76,7 +76,7 @@ class AppTests(unittest.TestCase):
         scenarios = ["song", "podcast", "audiobook"]
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         for scenario in scenarios:
-            app.service = AudioFileService(None)
+            app = create_app(AudioFileService(None))
             app.service.get_file = MagicMock(return_value=body_data)
             tester = app.test_client(self)
             response = tester.get(f"/{scenario}/66")
@@ -89,7 +89,7 @@ class AppTests(unittest.TestCase):
         error_message = "SomeError"
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
-            app.service = AudioFileService(None)
+            app = create_app(AudioFileService(None))
             app.service.delete_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
             tester = app.test_client(self)
             response = tester.delete(f"/{scenario}/83662")
@@ -101,7 +101,7 @@ class AppTests(unittest.TestCase):
         error_message = "SomeError"
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
-            app.service = AudioFileService(None)
+            app = create_app(AudioFileService(None))
             app.service.delete_file = MagicMock(side_effect=Exception(error_message))
             tester = app.test_client(self)
             response = tester.delete(f"/{scenario}/83662")
@@ -112,7 +112,7 @@ class AppTests(unittest.TestCase):
     def test_successful_deletion(self):
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
-            app.service = AudioFileService(None)
+            app = create_app(AudioFileService(None))
             app.service.delete_file = MagicMock(return_value=None)
             tester = app.test_client(self)
             response = tester.delete(f"/{scenario}/66")
