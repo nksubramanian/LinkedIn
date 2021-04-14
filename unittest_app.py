@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
+
+import business_errors
 from app import app
 import audio_service
 
@@ -7,7 +9,7 @@ class AppTests(unittest.TestCase):
     def test_unsuccesful_creation_song(self):
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         error_message = "SomeError"
-        app.service.add_audio_file = MagicMock(side_effect=audio_service.UserInputError(error_message))
+        app.service.add_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
         tester = app.test_client(self)
         response = tester.post("/song/83662", json=body_data)
         response_message = response.stream.response.data.decode("UTF-8")
@@ -17,7 +19,7 @@ class AppTests(unittest.TestCase):
 
     def test_unsuccesful_get(self):
         error_message = "SomeError"
-        app.service.add_audio_file = MagicMock(side_effect=audio_service.UserInputError(error_message))
+        app.service.add_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
         tester = app.test_client(self)
         response = tester.post("/song/83662")
         response_message = response.stream.response.data.decode("UTF-8")
@@ -26,7 +28,7 @@ class AppTests(unittest.TestCase):
 
     def test_unsuccesful_deletion(self):
         error_message = "SomeError"
-        app.service.add_audio_file = MagicMock(side_effect=audio_service.UserInputError(error_message))
+        app.service.add_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
         tester = app.test_client(self)
         response = tester.post("/song/83662")
         response_message = response.stream.response.data.decode("UTF-8")

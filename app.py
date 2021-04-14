@@ -1,5 +1,6 @@
 from flask import Flask, request
-from audio_service import AudioService, UserInputError
+from audio_service import AudioService
+from business_errors import UserInputError
 
 app = Flask(__name__)
 app.service = AudioService()

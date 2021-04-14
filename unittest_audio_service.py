@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from audio_service import AudioService
-from audio_service import UserInputError
+from business_errors import UserInputError
 
 l = [
      ("song", "Audio file Id has to be integer", {"name": "b", "duration": 4, "uploaded_time": "2034-06-01 01:10:20"}, "s"),
