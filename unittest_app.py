@@ -53,9 +53,9 @@ class AppTests(unittest.TestCase):
         error_message = "SomeError"
         for scenario in scenarios:
             app.service = AudioFileService(None)
-            app.service.add_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
+            app.service.get_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
             tester = app.test_client(self)
-            response = tester.post(f"/{scenario}/83662")
+            response = tester.get(f"/{scenario}/83662")
             response_message = response.stream.response.data.decode("UTF-8")
             assert response_message == error_message
             assert response.status_code == 400
@@ -65,9 +65,9 @@ class AppTests(unittest.TestCase):
         error_message = "SomeError"
         for scenario in scenarios:
             app.service = AudioFileService(None)
-            app.service.add_audio_file = MagicMock(side_effect=Exception(error_message))
+            app.service.get_file = MagicMock(side_effect=Exception(error_message))
             tester = app.test_client(self)
-            response = tester.post(f"/{scenario}/83662")
+            response = tester.get(f"/{scenario}/83662")
             response_message = response.stream.response.data.decode("UTF-8")
             assert response_message == error_message
             assert response.status_code == 500
@@ -88,25 +88,38 @@ class AppTests(unittest.TestCase):
     def test_unsuccesful_deletion_with_user_error(self):
         error_message = "SomeError"
         scenarios = ["song", "podcast", "audiobook"]
-        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         for scenario in scenarios:
             app.service = AudioFileService(None)
-            app.service.get_file = MagicMock(return_value=body_data)
-            app.service.add_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
+            app.service.delete_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
             tester = app.test_client(self)
-            response = tester.post(f"/{scenario}/83662")
+            response = tester.delete(f"/{scenario}/83662")
             response_message = response.stream.response.data.decode("UTF-8")
             assert response_message == error_message
             assert response.status_code == 400
 
-    def test_successful_deletion_song(self):
-        app.service.delete_file = MagicMock(return_value={'name': 'b', 'duration': 4, 'uploaded_time': 'b'})
-        tester = app.test_client(self)
-        response = tester.delete("/song/66")
-        response_message = response.stream.response.data.decode("UTF-8")
-        assert eval(response_message) == {"duration": 4, "name": "b", "uploaded_time": "b"}
-        assert response.status_code == 200
-        self.assert_method_called_once_with_params(self, app.service.delete_file, ("song", 66))
+    def test_unsuccesful_deletion_with_system_error(self):
+        error_message = "SomeError"
+        scenarios = ["song", "podcast", "audiobook"]
+        for scenario in scenarios:
+            app.service = AudioFileService(None)
+            app.service.delete_file = MagicMock(side_effect=Exception(error_message))
+            tester = app.test_client(self)
+            response = tester.delete(f"/{scenario}/83662")
+            response_message = response.stream.response.data.decode("UTF-8")
+            assert response_message == error_message
+            assert response.status_code == 500
+
+    def test_successful_deletion(self):
+        scenarios = ["song", "podcast", "audiobook"]
+        for scenario in scenarios:
+            app.service = AudioFileService(None)
+            app.service.delete_file = MagicMock(return_value=None)
+            tester = app.test_client(self)
+            response = tester.delete(f"/{scenario}/66")
+            response_message = response.stream.response.data.decode("UTF-8")
+            assert response_message == ""
+            assert response.status_code == 200
+            self.assert_method_called_once_with_params(self, app.service.delete_file, (scenario, 66))
 
     @staticmethod
     def assert_method_called_once_with_params(self, method, expected_params):

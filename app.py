@@ -22,6 +22,8 @@ def get_audio_file(audio_file_type, audio_file_id):
         return x
     except UserInputError as error:
         return error.args[0], 400
+    except Exception as error:
+        return error.args[0], 500
 
 
 @app.route("/<string:audio_file_type>/<int:audio_file_id>", methods=['DELETE'])
@@ -31,3 +33,5 @@ def delete_audio_file(audio_file_type, audio_file_id):
         return ""
     except UserInputError as error:
         return error.args[0], 400
+    except Exception as error:
+        return error.args[0], 500
