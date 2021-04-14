@@ -1,2 +1,2 @@
-Time is not passed while creating. It is computed
-The id for creating the record is passed by the user
+On successful creation of audio file the response message is empty
+The id for creating the record is passed by the user (ID is not auto generated)

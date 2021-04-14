@@ -41,13 +41,13 @@ class AudioServiceTests(unittest.TestCase):
 
 
     def test_add_audio_file(self):
-        song_body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date':'wef'}
+        song_body_data = {'name': 'b', 'duration': 4, 'uploaded_time': '2031-04-14 14:41:32', 'date':'wef'}
         podcast_body_data = {'name': 'gh',
                              'duration': 45,
-                             'uploaded_time': 1234,
+                             'uploaded_time': '2031-04-14 14:41:32',
                              'host': 'abced',
                              "participants": ["ac", "ca"]}
-        audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": 34}
+        audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": '2031-04-14 14:41:32'}
         audioservice = AudioService()
         audioservice.database.add_song = MagicMock(return_value=None)
         audioservice.database.add_podcast = MagicMock(return_value=None)
