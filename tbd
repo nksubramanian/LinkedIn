@@ -1,18 +1,67 @@
 Update api (PUT)
+    30 mins - Controller
+    30 mins - Business
+    30 mins - database layer
+    30 mins - Controller unit tests
+    30 mins - database unit tests
 
-business validation improve the coverage
-    creation parameters validation for song, podcast and audiobooks
-    when database throws an error
-    delete for song podcast and audiobooks
-    get test for song podcast and audiobooks
+no extra parameters in creation should be persisted. Filtering has to happen in business layer
+    60 mins - produciton code
+    60 mins - unit test code
+
+Business unit tests
+    Song creation parameters
+    Audiobook creation parameters
+    Podcast creation paramters
+    Successful creation song
+    Successful creation Audiobook
+    Successful creation Podcast
+    Database Error in creation song (Expected)
+    Database Error in creation Audiobook (expected)
+    Database Error in creation Podcast (expected)
+    Database Error in creation song (un Expected)
+    Database Error in creation Audiobook (un expected)
+    Database Error in creation Podcast (un expected)
+	Successful deletion song
+    Successful deletion Audiobook
+    Successful deletion Podcast
+    Database Error in deletion song (Expected)
+    Database Error in deletion Audiobook (expected)
+    Database Error in deletion Podcast (expected)
+    Database Error in deletion song (un Expected)
+    Database Error in deletion Audiobook (un expected)
+    Database Error in deletion Podcast (un expected)
+    Successful updation song
+    Successful updation Audiobook
+    Successful updation Podcast
+    Database Error in updation song (Expected)
+    Database Error in updation Audiobook (expected)
+    Database Error in updation Podcast (expected)
+    Database Error in updation song (un Expected)
+    Database Error in updation Audiobook (un expected)
+    Database Error in updation Podcast (un expected)
+	Successful get song
+    Successful get Audiobook
+    Successful get Podcast
+    Database Error in get song (Expected)
+    Database Error in get Audiobook (expected)
+    Database Error in get Podcast (expected)
+    Database Error in get song (un Expected)
+    Database Error in get Audiobook (un expected)
+    Database Error in get Podcast (un expected)
+
+Postman collection for update
+    5 mins
+
+
 
 database testing
-no extra parameters in creation should be persisted. Filtering has to happen in business layer
 
-Postman
-proper use of sub tests
+
+
 measure coverage
 Get should not return _id. this should return id
+proper use of sub tests
 
 
 
