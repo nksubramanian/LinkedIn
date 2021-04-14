@@ -1,3 +1,14 @@
+no extra parameters in creation should be persisted. Filtering has to happen in business layer
+    60 mins - produciton code
+    (low prio) 60 mins - unit test code
+
+Getting a list of audiofile, podcasts, songs
+    30 mins - Controller
+    30 mins - Business
+    30 mins - database layer
+    30 mins - Controller unit tests
+    30 mins - database unit tests
+
 Update api (PUT)
     30 mins - Controller
     30 mins - Business
@@ -5,9 +16,12 @@ Update api (PUT)
     30 mins - Controller unit tests
     30 mins - database unit tests
 
-no extra parameters in creation should be persisted. Filtering has to happen in business layer
-    60 mins - produciton code
-    60 mins - unit test code
+Get should not return _id. this should return id
+    30 mins
+
+Postman collection for update
+    5 mins
+
 
 Business unit tests
     Song creation parameters
@@ -50,20 +64,7 @@ Business unit tests
     Database Error in get Audiobook (un expected)
     Database Error in get Podcast (un expected)
 
-Postman collection for update
-    5 mins
-
-Getting a list of audiofile, podcasts, songs
-
-
-database testing
-
-
-
 measure coverage
-Get should not return _id. this should return id
 proper use of sub tests
-
-
 For all tests use setup and teardown
 
