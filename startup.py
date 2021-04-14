@@ -1,4 +1,4 @@
-from app import app
+from app import create_app
 from audio_service import AudioFileService
 from persistance_gateway import PersistenceGateway
 from pymongo import MongoClient
@@ -14,7 +14,7 @@ if db_environment_variable_name in environment_variables.keys():
 mongo_client = MongoClient(database_uri)
 persistence_gateway = PersistenceGateway(mongo_client)
 audio_file_service = AudioFileService(persistence_gateway)
-app.service = audio_file_service
+app = create_app(audio_file_service)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=80)
