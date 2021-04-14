@@ -4,9 +4,12 @@ from persistance_gateway import PersistenceGateway
 from pymongo import MongoClient
 
 import os
-database_uri = os.environ['AUDIO_FILE_SERVER_DATABASE_URI']
-if database_uri is None:
-    database_uri = "mongodb://localhost:27017/"
+
+db_environment_variable_name = 'AUDIO_FILE_SERVER_DATABASE_URI'
+environment_variables = os.environ
+database_uri = "mongodb://localhost:27017/"
+if db_environment_variable_name in environment_variables.keys():
+    database_uri = environment_variables[db_environment_variable_name]
 
 mongo_client = MongoClient(database_uri)
 persistence_gateway = PersistenceGateway(mongo_client)
