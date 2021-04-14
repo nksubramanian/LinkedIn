@@ -60,6 +60,31 @@ class AppTests(unittest.TestCase):
             assert response_message == error_message
             assert response.status_code == 400
 
+    def test_get_with_system_error(self):
+        scenarios = ["song", "podcast", "audiobook"]
+        error_message = "SomeError"
+        for scenario in scenarios:
+            app.service = AudioFileService(None)
+            app.service.add_audio_file = MagicMock(side_effect=Exception(error_message))
+            tester = app.test_client(self)
+            response = tester.post(f"/{scenario}/83662")
+            response_message = response.stream.response.data.decode("UTF-8")
+            assert response_message == error_message
+            assert response.status_code == 500
+
+    def test_successful_get(self):
+        scenarios = ["song", "podcast", "audiobook"]
+        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
+        for scenario in scenarios:
+            app.service = AudioFileService(None)
+            app.service.get_file = MagicMock(return_value=body_data)
+            tester = app.test_client(self)
+            response = tester.get(f"/{scenario}/66")
+            response_message = response.stream.response.data.decode("UTF-8")
+            assert eval(response_message) == body_data
+            assert response.status_code == 200
+            self.assert_method_called_once_with_params(self, app.service.get_file, (scenario, 66))
+
     def test_unsuccesful_deletion(self):
         error_message = "SomeError"
         app.service.add_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
@@ -68,38 +93,6 @@ class AppTests(unittest.TestCase):
         response_message = response.stream.response.data.decode("UTF-8")
         assert response_message == error_message
         assert response.status_code == 400
-
-
-
-    def test_successful_creation_podcast(self):
-        body_data = { 'name': 'gh', 'duration': 45, 'uploaded_time': 1234, 'host': 'abced', "participants": ["ac", "ca"]}
-        app.service.add_audio_file = MagicMock(return_value=None)
-        tester = app.test_client(self)
-        response = tester.post("/podcast/662", json=body_data)
-        response_message = response.stream.response.data.decode("UTF-8")
-        assert response_message == ""
-        assert response.status_code == 200
-        self.assert_method_called_once_with_params(self, app.service.add_audio_file, ("podcast", 662, body_data))
-
-    def test_successful_creation_audiobook(self):
-        body_data = {"title": "aaa", "author": 45, "narrator": 1234, "duration": 78, "uploaded_time": 34}
-        app.service.add_audio_file = MagicMock(return_value=None)
-        tester = app.test_client(self)
-        response = tester.post("/audiobook/66", json=body_data)
-        response_message = response.stream.response.data.decode("UTF-8")
-        assert response_message == ""
-        assert response.status_code == 200
-        self.assert_method_called_once_with_params(self, app.service.add_audio_file, ("audiobook", 66, body_data))
-
-    def test_successful_retrieval_song(self):
-        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
-        app.service.get_file = MagicMock(return_value=body_data)
-        tester = app.test_client(self)
-        response = tester.get("/song/66")
-        response_message = response.stream.response.data.decode("UTF-8")
-        assert eval(response_message) == body_data
-        assert response.status_code == 200
-        self.assert_method_called_once_with_params(self, app.service.get_file, ("song", 66))
 
     def test_successful_retrieval_podcast(self):
         body_data = {'name': 'gh', 'duration': 45,'uploaded_time': 1234, 'host': 'abced', "participants": ["ac", "ca"]}
@@ -132,16 +125,16 @@ class AppTests(unittest.TestCase):
         self.assert_method_called_once_with_params(self, app.service.delete_file, ("song", 66))
 
     @staticmethod
-    def assert_method_called_once_with_params(self, method, tuple_params):
+    def assert_method_called_once_with_params(self, method, expected_params):
         method.assert_called_once()
         call_args = method.call_args.args
-        self.assert_are_same(call_args, tuple_params)
+        self.assert_are_same(call_args, expected_params)
 
     @staticmethod
-    def assert_are_same(tuple1, tuple2):
-        for i in range(0, len(tuple1)):
-            assert tuple1[i] == tuple2[i]
-        assert len(tuple1) == len(tuple2)
+    def assert_are_same(actual_params, expected_params):
+        for i in range(0, len(actual_params)):
+            assert actual_params[i] == expected_params[i], f"Expected={actual_params} Actual={expected_params}"
+        assert len(actual_params) == len(expected_params), f"Expected={actual_params} Actual={expected_params}"
 
 
 
