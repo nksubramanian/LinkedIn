@@ -37,9 +37,10 @@ class AppTests(unittest.TestCase):
 
     def test_successful_creation(self):
         scenarios = ["song", "podcast", "audiobook"]
-        body_data = { 'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
-        app.service.add_audio_file = MagicMock(return_value=None)
+        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         for scenario in scenarios:
+            app.service = AudioFileService(None)
+            app.service.add_audio_file = MagicMock(return_value=None)
             tester = app.test_client(self)
             response = tester.post(f"/{scenario}/83662", json = body_data)
             response_message = response.stream.response.data.decode("UTF-8")
@@ -47,15 +48,17 @@ class AppTests(unittest.TestCase):
             assert response.status_code == 200
             self.assert_method_called_once_with_params(self, app.service.add_audio_file, (scenario, 83662, body_data))
 
-
-    def test_unsuccesful_get(self):
+    def test_get_with_user_error(self):
+        scenarios = ["song", "podcast", "audiobook"]
         error_message = "SomeError"
-        app.service.add_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
-        tester = app.test_client(self)
-        response = tester.post("/song/83662")
-        response_message = response.stream.response.data.decode("UTF-8")
-        assert response_message == error_message
-        assert response.status_code == 400
+        for scenario in scenarios:
+            app.service = AudioFileService(None)
+            app.service.add_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
+            tester = app.test_client(self)
+            response = tester.post(f"/{scenario}/83662")
+            response_message = response.stream.response.data.decode("UTF-8")
+            assert response_message == error_message
+            assert response.status_code == 400
 
     def test_unsuccesful_deletion(self):
         error_message = "SomeError"
