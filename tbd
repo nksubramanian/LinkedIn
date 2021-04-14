@@ -1,7 +1,8 @@
-status checking
 business validation
 database testing
 no extra parameters in creation should be persisted. Filtering has to happen in business layer
 Update api (PUT)
 Postman
+proper use of sub tests
+
 
