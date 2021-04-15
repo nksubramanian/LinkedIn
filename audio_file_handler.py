@@ -2,48 +2,31 @@ from datetime import datetime
 from business_errors import UserInputError
 
 
-class AudioBookHandler:
+class Handler:
     def __init__(self, persistence_gateway):
         self.persistence_gateway = persistence_gateway
-        self.collection = "audiobook"
+        self.collection = ""
+
+    def _assert_creation_parameters_are_correct(self, creation_parameters):
+        raise NotImplementedError()
+
+    def _get_valid_properties(self):
+        raise NotImplementedError()
+
+    def __filter_audio_file(self, creation_request):
+        valid_properties = self._get_valid_properties()
+        filtered = dict((key, value) for key, value in creation_request.items() if key in valid_properties)
+        return filtered
 
     def update_audio_file(self, audio_file_id, creation_request):
-        self.__assert_creation_parameters_are_correct(creation_request)
+        self._assert_creation_parameters_are_correct(creation_request)
         filtered_creation_request = self.__filter_audio_file(creation_request)
         self.persistence_gateway.update(self.collection, audio_file_id, filtered_creation_request)
 
     def add_audio_file(self, audio_file_id, creation_request):
-        self.__assert_creation_parameters_are_correct(creation_request)
+        self._assert_creation_parameters_are_correct(creation_request)
         filtered_creation_request = self.__filter_audio_file(creation_request)
         self.persistence_gateway.add(self.collection, audio_file_id, filtered_creation_request)
-
-    @staticmethod
-    def __assert_creation_parameters_are_correct(r):
-        if 'title' not in r.keys():
-            raise UserInputError("Name of the song is mandatory")
-        if len(r['title']) > 100:
-            raise UserInputError("Title cannot be greater than 100 characters")
-        if 'author' not in r.keys():
-            raise UserInputError("Name of the song is mandatory")
-        if len(r['author']) > 100:
-            print(r['author'])
-            raise UserInputError("Author cannot be greater than 100 characters")
-        if 'narrator' not in r.keys():
-            raise UserInputError("Narrator is mandatory")
-        if len(r['narrator']) > 100:
-            raise UserInputError("Narrator cannot be greater than 100 characters")
-        if 'duration' not in r.keys():
-            raise UserInputError("Duration of the song is mandatory")
-        if type(r['duration']) != int:
-            raise UserInputError("duration has to be integer")
-        if r['duration'] < 0:
-            raise UserInputError("duration has to be a positive integer")
-        if 'uploaded_time' not in r.keys():
-            raise UserInputError("date is mandatory")
-        if type(r['uploaded_time']) != str:
-            raise UserInputError("date needs to be in string format")
-        if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
-            raise UserInputError("date cannot be in the past")
 
     def get_audio_file(self, audio_file_id):
         return self.persistence_gateway.get(self.collection, audio_file_id)
@@ -51,35 +34,52 @@ class AudioBookHandler:
     def delete_audio_file(self, audio_file_id):
         self.persistence_gateway.delete(self.collection, audio_file_id)
 
-    @staticmethod
-    def __filter_audio_file(creation_request):
-        valid_properties = {"title", "author", "narrator", "duration", "uploaded_time"}
-        filtered = dict((key, value) for key, value in creation_request.items() if key in valid_properties)
-        return filtered
-
     def get_audio_files(self):
         return self.persistence_gateway.get_all(self.collection)
 
 
-class SongHandler:
+class AudioBookHandler(Handler):
     def __init__(self, persistence_gateway):
-        self.persistence_gateway = persistence_gateway
+        super(AudioBookHandler, self).__init__(persistence_gateway)
+        self.collection = "audiobook"
+
+    def _get_valid_properties(self):
+        return {"title", "author", "narrator", "duration", "uploaded_time"}
+
+    def _assert_creation_parameters_are_correct(self, creation_parameters):
+        if 'title' not in creation_parameters.keys():
+            raise UserInputError("Name of the song is mandatory")
+        if len(creation_parameters['title']) > 100:
+            raise UserInputError("Title cannot be greater than 100 characters")
+        if 'author' not in creation_parameters.keys():
+            raise UserInputError("Name of the song is mandatory")
+        if len(creation_parameters['author']) > 100:
+            print(creation_parameters['author'])
+            raise UserInputError("Author cannot be greater than 100 characters")
+        if 'narrator' not in creation_parameters.keys():
+            raise UserInputError("Narrator is mandatory")
+        if len(creation_parameters['narrator']) > 100:
+            raise UserInputError("Narrator cannot be greater than 100 characters")
+        if 'duration' not in creation_parameters.keys():
+            raise UserInputError("Duration of the song is mandatory")
+        if type(creation_parameters['duration']) != int:
+            raise UserInputError("duration has to be integer")
+        if creation_parameters['duration'] < 0:
+            raise UserInputError("duration has to be a positive integer")
+        if 'uploaded_time' not in creation_parameters.keys():
+            raise UserInputError("date is mandatory")
+        if type(creation_parameters['uploaded_time']) != str:
+            raise UserInputError("date needs to be in string format")
+        if datetime.now() > datetime.fromisoformat(creation_parameters['uploaded_time']):
+            raise UserInputError("date cannot be in the past")
+
+
+class SongHandler(Handler):
+    def __init__(self, persistence_gateway):
+        super(SongHandler, self).__init__(persistence_gateway)
         self.collection = "song"
 
-    def update_audio_file(self, audio_file_id, creation_request):
-        self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
-        filtered_creation_request = self.__filter_audio_file(creation_request)
-        self.persistence_gateway.update(self.collection, audio_file_id, filtered_creation_request)
-
-    def add_audio_file(self, audio_file_id, creation_request):
-        self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
-        filtered_creation_request = self.__filter_audio_file(creation_request)
-        self.persistence_gateway.add(self.collection, audio_file_id, filtered_creation_request)
-
-    @staticmethod
-    def __assert_creation_parameters_are_correct(audio_file_id, r):
-        if type(audio_file_id) is not int:
-            raise UserInputError("Audio file Id has to be integer")
+    def _assert_creation_parameters_are_correct(self, r):
         if 'name' not in r.keys():
             raise UserInputError("Name of the song is mandatory")
         if len(r['name']) > 100:
@@ -97,38 +97,16 @@ class SongHandler:
         if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
             raise UserInputError("date cannot be in the past")
 
-    def get_audio_file(self, audio_file_id):
-        return self.persistence_gateway.get(self.collection, audio_file_id)
-
-    def delete_audio_file(self, audio_file_id):
-        return self.persistence_gateway.delete(self.collection, audio_file_id)
-
-    @staticmethod
-    def __filter_audio_file(creation_request):
-        valid_properties = {"name", "duration", "uploaded_time"}
-        return dict((key, value) for key, value in creation_request.items() if key in valid_properties)
-
-    def get_audio_files(self):
-        return self.persistence_gateway.get_all(self.collection)
+    def _get_valid_properties(self):
+        return {"name", "duration", "uploaded_time"}
 
 
-class PodcastHandler:
+class PodcastHandler(Handler):
     def __init__(self, persistence_gateway):
-        self.persistence_gateway = persistence_gateway
+        super(PodcastHandler, self).__init__(persistence_gateway)
         self.collection = 'podcast'
 
-    def update_audio_file(self, audio_file_id, creation_request):
-        self.__assert_creation_parameters_are_correct(creation_request)
-        filtered_creation_request = self.__filter_audio_file(creation_request)
-        self.persistence_gateway.update(self.collection, audio_file_id, filtered_creation_request)
-
-    def add_audio_file(self, audio_file_id, creation_request):
-        self.__assert_creation_parameters_are_correct(creation_request)
-        filtered_creation_request = self.__filter_audio_file(creation_request)
-        self.persistence_gateway.add(self.collection, audio_file_id, filtered_creation_request)
-
-    @staticmethod
-    def __assert_creation_parameters_are_correct(r):
+    def _assert_creation_parameters_are_correct(self, r):
         if 'name' not in r.keys():
             raise UserInputError("Name of the song is mandatory")
         if len(r['name']) > 100:
@@ -158,16 +136,5 @@ class PodcastHandler:
         if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
             raise UserInputError("uploaded_time cannot be in the past")
 
-    def get_audio_file(self, audio_file_id):
-        return self.persistence_gateway.get(self.collection, audio_file_id)
-
-    def delete_audio_file(self, audio_file_id):
-        return self.persistence_gateway.delete(self.collection, audio_file_id)
-
-    @staticmethod
-    def __filter_audio_file(creation_request):
-        valid_properties = {"name", "duration", "uploaded_time", "host", "participants"}
-        return dict((key, value) for key, value in creation_request.items() if key in valid_properties)
-
-    def get_audio_files(self):
-        return self.persistence_gateway.get_all(self.collection)
+    def _get_valid_properties(self):
+        return {"name", "duration", "uploaded_time", "host", "participants"}
