@@ -6,14 +6,13 @@ class PersistenceGateway:
         self.myclient = client
         self.mydb = self.myclient["mydatabase"]
 
-    def update(self, collection, id, data_dictionary):
-        data_dictionary["_id"] = id
-        self.mydb[collection].replace_one({"_id": id}, data_dictionary)
+    def update(self, collection, id_, data_dictionary):
+        data_dictionary["_id"] = id_
+        self.mydb[collection].replace_one({"_id": id_}, data_dictionary)
 
-
-    def add(self, collection, id, data_dictionary):
+    def add(self, collection, id_, data_dictionary):
         try:
-            data_dictionary["_id"] = id
+            data_dictionary["_id"] = id_
             self.mydb[collection].insert_one(data_dictionary)
         except pymongo.errors.DuplicateKeyError as error:
             raise UnableToInsertDueToDuplicateKeyError("Id already exists")
@@ -31,11 +30,11 @@ class PersistenceGateway:
             raise ItemNotFound()
 
     def all_records(self, collection):
-        temp = []
+        results = []
         for doc in self.mydb[collection].find():
             doc['id'] = doc.pop('_id')
-            temp.append(doc)
-        return temp
+            results.append(doc)
+        return results
 
 
 class UnableToInsertDueToDuplicateKeyError(Exception):
