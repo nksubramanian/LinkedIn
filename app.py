@@ -50,10 +50,7 @@ def create_app(service):
     @app.route("/<string:audio_file_type>", methods=['GET'])
     def get_audio_files(audio_file_type):
         x = app.service.get_files(audio_file_type)
-        print(x)
         y = jsonify(x)
-        print("---")
-        print(y)
         return y
 
     return app
