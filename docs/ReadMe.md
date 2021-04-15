@@ -6,3 +6,5 @@
 - The mongodb uri has to be set in the enviornment variable AUDIO_FILE_SERVER_DATABASE_URI
 - else the defaul value of the URI used is mongodb://localhost:27017/
 - There is a postman collection to test (integration)
+- Command to run test coverage is "coverage run -m unittest ut\unittest_persistence_gateway.py ut\unittest_app.py"
+- Command to get coverage report is "coverage report"
