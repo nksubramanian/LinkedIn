@@ -7,7 +7,7 @@ from audio_service import AudioFileService
 
 
 class AppTests(unittest.TestCase):
-    def test_creation_with_user_exception(self):
+    def test_create_user_error(self):
         scenarios = ["song", "podcast", "audiobook"]
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         error_message = "SomeError"
@@ -21,7 +21,7 @@ class AppTests(unittest.TestCase):
             assert response.status_code == 400, helper.assert_message(scenario, 400, response.status_code)
             self.assert_method_called_once_with_params(self, app.service.add_audio_file, (scenario, 83662, body_data))
 
-    def test_creation_with_system_exception(self):
+    def test_create_system_error(self):
         scenarios = ["song", "podcast", "audiobook"]
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         error_message = "SomeError"
@@ -35,7 +35,7 @@ class AppTests(unittest.TestCase):
             assert response.status_code == 500, helper.assert_message(scenario, 500, response.status_code)
             self.assert_method_called_once_with_params(self, app.service.add_audio_file, (scenario, 83662, body_data))
 
-    def test_successful_creation(self):
+    def test_create(self):
         scenarios = ["song", "podcast", "audiobook"]
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         for scenario in scenarios:
@@ -48,7 +48,7 @@ class AppTests(unittest.TestCase):
             assert response.status_code == 200
             self.assert_method_called_once_with_params(self, app.service.add_audio_file, (scenario, 83662, body_data))
 
-    def test_get_with_user_error(self):
+    def test_get_user_error(self):
         scenarios = ["song", "podcast", "audiobook"]
         error_message = "SomeError"
         for scenario in scenarios:
@@ -60,7 +60,7 @@ class AppTests(unittest.TestCase):
             assert response_message == error_message
             assert response.status_code == 400
 
-    def test_get_with_system_error(self):
+    def test_get_user_system_error(self):
         scenarios = ["song", "podcast", "audiobook"]
         error_message = "SomeError"
         for scenario in scenarios:
@@ -72,7 +72,7 @@ class AppTests(unittest.TestCase):
             assert response_message == error_message
             assert response.status_code == 500
 
-    def test_successful_get(self):
+    def test_get(self):
         scenarios = ["song", "podcast", "audiobook"]
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
         for scenario in scenarios:
@@ -85,7 +85,7 @@ class AppTests(unittest.TestCase):
             assert response.status_code == 200
             self.assert_method_called_once_with_params(self, app.service.get_file, (scenario, 66))
 
-    def test_unsuccesful_deletion_with_user_error(self):
+    def test_delete_user_error(self):
         error_message = "SomeError"
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
@@ -97,7 +97,7 @@ class AppTests(unittest.TestCase):
             assert response_message == error_message
             assert response.status_code == 400
 
-    def test_unsuccesful_deletion_with_system_error(self):
+    def test_delete_system_error(self):
         error_message = "SomeError"
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
@@ -109,7 +109,7 @@ class AppTests(unittest.TestCase):
             assert response_message == error_message
             assert response.status_code == 500
 
-    def test_successful_deletion(self):
+    def test_delete(self):
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
             app = create_app(AudioFileService(None))
@@ -121,7 +121,7 @@ class AppTests(unittest.TestCase):
             assert response.status_code == 200
             self.assert_method_called_once_with_params(self, app.service.delete_file, (scenario, 66))
 
-    def test_get_files_with_user_error(self):
+    def test_get_files_user_error(self):
         error_message = "SomeError"
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
@@ -133,8 +133,7 @@ class AppTests(unittest.TestCase):
             assert response_message == error_message
             assert response.status_code == 400
 
-
-    def test_get_files_with_system_error(self):
+    def test_get_files_system_error(self):
         error_message = "SomeError"
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
@@ -146,8 +145,7 @@ class AppTests(unittest.TestCase):
             assert response_message == error_message
             assert response.status_code == 500
 
-
-    def test_successful_get_files(self):
+    def test_get_files(self):
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
             app = create_app(AudioFileService(None))
@@ -158,6 +156,47 @@ class AppTests(unittest.TestCase):
             assert eval(response_message) == [{"a": "b"}, {"c": " d"}]
             assert response.status_code == 200
             self.assert_method_called_once_with_params(self, app.service.get_files, (scenario,))
+
+    def test_update_user_error(self):
+        scenarios = ["song", "podcast", "audiobook"]
+        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
+        error_message = "SomeError"
+        for scenario in scenarios:
+            app = create_app(AudioFileService(None))
+            app.service.update_audio_file = MagicMock(side_effect=business_errors.UserInputError(error_message))
+            tester = app.test_client(self)
+            response = tester.put(f"/{scenario}/83662", json=body_data)
+            res_message = response.stream.response.data.decode("UTF-8")
+            assert res_message == error_message, helper.assert_message(scenario, error_message, res_message)
+            assert response.status_code == 400, helper.assert_message(scenario, 400, response.status_code)
+            self.assert_method_called_once_with_params(self, app.service.update_audio_file, (scenario, 83662, body_data))
+
+    def test_update_system_error(self):
+        scenarios = ["song", "podcast", "audiobook"]
+        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
+        error_message = "SomeError"
+        for scenario in scenarios:
+            app = create_app(AudioFileService(None))
+            app.service.update_audio_file = MagicMock(side_effect=Exception(error_message))
+            tester = app.test_client(self)
+            response = tester.put(f"/{scenario}/83662", json=body_data)
+            res_message = response.stream.response.data.decode("UTF-8")
+            assert res_message == error_message, helper.assert_message(scenario, error_message, res_message)
+            assert response.status_code == 500, helper.assert_message(scenario, 500, response.status_code)
+            self.assert_method_called_once_with_params(self, app.service.update_audio_file, (scenario, 83662, body_data))
+
+    def test_update(self):
+        scenarios = ["song", "podcast", "audiobook"]
+        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b'}
+        for scenario in scenarios:
+            app = create_app(AudioFileService(None))
+            app.service.update_audio_file = MagicMock(return_value=None)
+            tester = app.test_client(self)
+            response = tester.put(f"/{scenario}/83662", json = body_data)
+            response_message = response.stream.response.data.decode("UTF-8")
+            assert response_message == ""
+            assert response.status_code == 200
+            self.assert_method_called_once_with_params(self, app.service.update_audio_file, (scenario, 83662, body_data))
 
 
 
