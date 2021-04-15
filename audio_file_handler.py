@@ -7,12 +7,17 @@ class AudioBookHandler:
         self.persistence_gateway = persistence_gateway
         self.collection = "audiobook"
 
+    def update_audio_file(self, audio_file_id, creation_request):
+        self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
+        filtered_creation_request = self.__filter_audio_file(creation_request)
+        self.persistence_gateway.update(self.collection, audio_file_id, filtered_creation_request)
+
     def add_audio_file(self, audio_file_id, creation_request):
-        self.__assert_audiobook_parameters(audio_file_id, creation_request)
+        self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
         filtered_creation_request = self.__filter_audio_file(creation_request)
         self.persistence_gateway.add(self.collection, audio_file_id, filtered_creation_request)
 
-    def __assert_audiobook_parameters(self, audio_file_id, r):
+    def __assert_creation_parameters_are_correct(self, audio_file_id, r):
         #if title is empty
         if 'title' not in r.keys():
             raise UserInputError("Name of the song is mandatory")
@@ -61,6 +66,11 @@ class SongHandler:
         self.persistence_gateway = persistence_gateway
         self.collection = "song"
 
+    def update_audio_file(self, audio_file_id, creation_request):
+        self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
+        filtered_creation_request = self.__filter_audio_file(creation_request)
+        self.persistence_gateway.update(self.collection, audio_file_id, filtered_creation_request)
+
     def add_audio_file(self, audio_file_id, creation_request):
         self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
         filtered_creation_request = self.__filter_audio_file(creation_request)
@@ -105,6 +115,11 @@ class PodcastHandler:
     def __init__(self, persistence_gateway):
         self.persistence_gateway = persistence_gateway
         self.collection = 'podcast'
+
+    def update_audio_file(self, audio_file_id, creation_request):
+        self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
+        filtered_creation_request = self.__filter_audio_file(creation_request)
+        self.persistence_gateway.update(self.collection, audio_file_id, filtered_creation_request)
 
     def add_audio_file(self, audio_file_id, creation_request):
         self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)

@@ -6,6 +6,11 @@ class PersistenceGateway:
         self.myclient = client
         self.mydb = self.myclient["mydatabase"]
 
+    def update(self, collection, id, data_dictionary):
+        data_dictionary["_id"] = id
+        self.mydb[collection].replace_one({"_id": id}, data_dictionary)
+
+
     def add(self, collection, id, data_dictionary):
         try:
             data_dictionary["_id"] = id

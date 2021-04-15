@@ -44,7 +44,12 @@ class AudioFileService:
         audio_file_handler = self.create_audio_file_handler(audio_file_type, self.persistence_gateway)
         return audio_file_handler.get_audio_files()
 
-
+    def update_audio_file(self, audio_file_type, audio_file_id, creation_request):
+        try:
+            audio_file_handler = self.create_audio_file_handler(audio_file_type, self.persistence_gateway)
+            audio_file_handler.update_audio_file(audio_file_id, creation_request)
+        except UnableToInsertDueToDuplicateKeyError as error:
+            raise UserInputError('ID already exist')
 
 
 
