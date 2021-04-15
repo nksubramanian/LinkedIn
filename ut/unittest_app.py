@@ -121,6 +121,32 @@ class AppTests(unittest.TestCase):
             assert response.status_code == 200
             self.assert_method_called_once_with_params(self, app.service.delete_file, (scenario, 66))
 
+    def test_get_files_with_user_error(self):
+        error_message = "SomeError"
+        scenarios = ["song", "podcast", "audiobook"]
+        for scenario in scenarios:
+            app = create_app(AudioFileService(None))
+            app.service.get_files = MagicMock(side_effect=business_errors.UserInputError(error_message))
+            tester = app.test_client(self)
+            response = tester.get(f"/{scenario}")
+            response_message = response.stream.response.data.decode("UTF-8")
+            assert response_message == error_message
+            assert response.status_code == 400
+
+
+    def test_get_files_with_system_error(self):
+        error_message = "SomeError"
+        scenarios = ["song", "podcast", "audiobook"]
+        for scenario in scenarios:
+            app = create_app(AudioFileService(None))
+            app.service.get_files = MagicMock(side_effect=Exception(error_message))
+            tester = app.test_client(self)
+            response = tester.get(f"/{scenario}")
+            response_message = response.stream.response.data.decode("UTF-8")
+            assert response_message == error_message
+            assert response.status_code == 500
+
+
     def test_successful_get_files(self):
         scenarios = ["song", "podcast", "audiobook"]
         for scenario in scenarios:
