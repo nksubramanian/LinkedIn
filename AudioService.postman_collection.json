@@ -799,6 +799,19 @@
 		},
 		{
 			"name": "audiobook add",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [
@@ -813,7 +826,7 @@
 					"raw": "{\r\n    \"title\": \"aaa\",\r\n    \"author\":\"ssss\",\r\n    \"narrator\":\"1234\",\r\n    \"duration\":78,\r\n    \"uploaded_time\":\"2034-06-01 01:10:20\"\r\n}"
 				},
 				"url": {
-					"raw": "http://localhost:80/audiobook/11111",
+					"raw": "http://localhost:80/audiobook/34",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -821,7 +834,50 @@
 					"port": "80",
 					"path": [
 						"audiobook",
-						"11111"
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "audiobook add again",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"aaa\",\r\n    \"author\":\"ssss\",\r\n    \"narrator\":\"1234\",\r\n    \"duration\":78,\r\n    \"uploaded_time\":\"2034-06-01 01:10:20\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:80/audiobook/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"audiobook",
+						"34"
 					]
 				}
 			},
@@ -829,6 +885,19 @@
 		},
 		{
 			"name": "audiobook get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -846,14 +915,113 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:80/audiobook",
+					"raw": "http://localhost:80/audiobook/34",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "80",
 					"path": [
-						"audiobook"
+						"audiobook",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "audiobook update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"modified\",\r\n    \"author\":\"ssss\",\r\n    \"narrator\":\"1234\",\r\n    \"duration\":78,\r\n    \"uploaded_time\":\"2034-06-01 01:10:20\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:80/audiobook/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"audiobook",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "audiobook get again",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:80/audiobook/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"audiobook",
+						"34"
 					]
 				}
 			},
@@ -861,6 +1029,62 @@
 		},
 		{
 			"name": "delete audiobook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});"
+				},
+				"url": {
+					"raw": "http://localhost:80/audiobook/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"audiobook",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete audiobook again",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -875,7 +1099,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:80/audiobook/89",
+					"raw": "http://localhost:80/audiobook/34",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -883,7 +1107,96 @@
 					"port": "80",
 					"path": [
 						"audiobook",
-						"89"
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "audiobook get again 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:80/song/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"song",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalid Update audiobook",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"modified\",\r\n    \"author\":\"ssss\",\r\n    \"narrator\":\"1234\",\r\n    \"duration\":78,\r\n    \"uploaded_time\":\"2034-06-01 01:10:20\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:80/audiobook/34333",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"audiobook",
+						"34333"
 					]
 				}
 			},
