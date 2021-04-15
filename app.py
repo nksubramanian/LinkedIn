@@ -1,8 +1,6 @@
 from flask import Flask, request
 from business_errors import UserInputError
 from flask import jsonify
-import flask
-import json
 
 
 def create_app(service):
@@ -58,8 +56,4 @@ def create_app(service):
         print(y)
         return y
 
-
-
     return app
-
-
