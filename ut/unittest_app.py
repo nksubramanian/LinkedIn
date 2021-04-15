@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-import unittest_helper
+import ut.unittest_helper as helper
 import business_errors
 from app import create_app
 from audio_service import AudioFileService
@@ -17,8 +17,8 @@ class AppTests(unittest.TestCase):
             tester = app.test_client(self)
             response = tester.post(f"/{scenario}/83662", json=body_data)
             res_message = response.stream.response.data.decode("UTF-8")
-            assert res_message == error_message, unittest_helper.assert_message(scenario, error_message, res_message)
-            assert response.status_code == 400, unittest_helper.assert_message(scenario, 400, response.status_code)
+            assert res_message == error_message, helper.assert_message(scenario, error_message, res_message)
+            assert response.status_code == 400, helper.assert_message(scenario, 400, response.status_code)
             self.assert_method_called_once_with_params(self, app.service.add_audio_file, (scenario, 83662, body_data))
 
     def test_creation_with_system_exception(self):
@@ -31,8 +31,8 @@ class AppTests(unittest.TestCase):
             tester = app.test_client(self)
             response = tester.post(f"/{scenario}/83662", json=body_data)
             res_message = response.stream.response.data.decode("UTF-8")
-            assert res_message == error_message, unittest_helper.assert_message(scenario, error_message, res_message)
-            assert response.status_code == 500, unittest_helper.assert_message(scenario, 500, response.status_code)
+            assert res_message == error_message, helper.assert_message(scenario, error_message, res_message)
+            assert response.status_code == 500, helper.assert_message(scenario, 500, response.status_code)
             self.assert_method_called_once_with_params(self, app.service.add_audio_file, (scenario, 83662, body_data))
 
     def test_successful_creation(self):
