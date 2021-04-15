@@ -3,6 +3,7 @@ from pymongo.errors import DuplicateKeyError
 from persistance_gateway import PersistenceGateway, UnableToInsertDueToDuplicateKeyError, ItemNotFound
 import unittest
 import mongomock
+from flask import jsonify
 
 
 class AppTests(unittest.TestCase):
@@ -56,6 +57,21 @@ class AppTests(unittest.TestCase):
         persistence_gateway = PersistenceGateway(client)
         with self.assertRaises(ItemNotFound):
             persistence_gateway.delete(collection_name, 3422)
+
+    def test_all_records(self):
+        body_data1 = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date':'wef'}
+        body_data2 = {'name': 'bsd', 'duration': 44, 'uploaded_time': 'gfdb', 'date': 'wefgs'}
+        collection_name = 'collection_name'
+        client = mongomock.MongoClient()
+        persistence_gateway = PersistenceGateway(client)
+        persistence_gateway.add(collection_name, 1, body_data1)
+        persistence_gateway.add(collection_name, 2, body_data2)
+        first_entry = persistence_gateway.get(collection_name, 1)
+        second_entry = persistence_gateway.get(collection_name, 2)
+        assert(len(persistence_gateway.all_records(collection_name))) == 2
+        assert(first_entry in persistence_gateway.all_records(collection_name))
+        assert (second_entry in persistence_gateway.all_records(collection_name))
+
 
 
 
