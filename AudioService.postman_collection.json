@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "03f20b45-152f-4ba1-ab19-de68b5799b39",
+		"_postman_id": "7fa24de0-06d7-4ce5-bc57-df254383e9cf",
 		"name": "AudioService",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -123,15 +123,14 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:80/song/34",
+					"raw": "http://localhost:80/song",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "80",
 					"path": [
-						"song",
-						"34"
+						"song"
 					]
 				}
 			},
@@ -396,6 +395,51 @@
 					"path": [
 						"song",
 						"1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SongList",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:80/song",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"song"
 					]
 				}
 			},
@@ -798,6 +842,51 @@
 			"response": []
 		},
 		{
+			"name": "Podcast get list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:80/podcast",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"podcast"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "audiobook add",
 			"event": [
 				{
@@ -1099,14 +1188,14 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:80/audiobook/34",
+					"raw": "http://localhost:80/mybook/34",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "80",
 					"path": [
-						"audiobook",
+						"mybook",
 						"34"
 					]
 				}
@@ -1145,14 +1234,14 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:80/song/34",
+					"raw": "http://localhost:80/audiobook/34",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "80",
 					"path": [
-						"song",
+						"audiobook",
 						"34"
 					]
 				}
@@ -1197,6 +1286,271 @@
 					"path": [
 						"audiobook",
 						"34333"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "audiobook get list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:80/audiobook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"audiobook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalidtype",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"aaa\",\r\n    \"author\":\"ssss\",\r\n    \"narrator\":\"1234\",\r\n    \"duration\":78,\r\n    \"uploaded_time\":\"2034-06-01 01:10:20\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:80/mybook/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"mybook",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Invalidtype",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"aaa\",\r\n    \"author\":\"ssss\",\r\n    \"narrator\":\"1234\",\r\n    \"duration\":78,\r\n    \"uploaded_time\":\"2034-06-01 01:10:20\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:80/mybook/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"mybook",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InvalidType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:80/mybook/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"mybook",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InvalidType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:80/mybook/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"mybook",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InvalidTypeList",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:80/mybook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "80",
+					"path": [
+						"mybook"
 					]
 				}
 			},

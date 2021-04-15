@@ -49,8 +49,12 @@ def create_app(service):
 
     @app.route("/<string:audio_file_type>", methods=['GET'])
     def get_audio_files(audio_file_type):
-        x = app.service.get_files(audio_file_type)
-        y = jsonify(x)
-        return y
+        try:
+            x = app.service.get_files(audio_file_type)
+            return jsonify(x)
+        except UserInputError as error:
+            return error.args[0], 400
+        except Exception as error:
+            return error.args[0], 500
 
     return app
