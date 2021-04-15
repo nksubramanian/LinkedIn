@@ -5,3 +5,4 @@
 - The code needs a mongod daemon to be running for the persitance layer
 - The mongodb uri has to be set in the enviornment variable AUDIO_FILE_SERVER_DATABASE_URI
 - else the defaul value of the URI used is mongodb://localhost:27017/
+- There is a postman collection to test (integration)
