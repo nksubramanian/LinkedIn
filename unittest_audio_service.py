@@ -1,7 +1,11 @@
 import unittest
 from unittest.mock import MagicMock
+
+from mongomock import MongoClient
+
 from audio_service import AudioFileService
 from business_errors import UserInputError
+from persistance_gateway import PersistenceGateway
 
 l = [
      ("song", "Audio file Id has to be integer", {"name": "b", "duration": 4, "uploaded_time": "2034-06-01 01:10:20"}, "s"),
@@ -32,12 +36,6 @@ class AudioServiceTests(unittest.TestCase):
                 assert error.args[0] == t[1]
                 exception_thrown = True
             assert exception_thrown is True
-
-
-
-
-
-
 
 
     def test_add_audio_file(self):
@@ -89,5 +87,22 @@ class AudioServiceTests(unittest.TestCase):
         assert audioservice.delete_file("song", 9999) == song_body_data
         assert audioservice.delete_file("podcast", 9999) == podcast_body_data
         assert audioservice.delete_file("audiobook", 9999) == audiobook_body_data
+
+    def test_get_files(self):
+        audio_file_types = ["song", "audiobook", "podcast"]
+        database_uri = "mongodb_uri"
+        mongo_client = MongoClient(database_uri)
+        persistence_gateway = PersistenceGateway(mongo_client)
+        audio_file_service = AudioFileService(persistence_gateway)
+        files = [{"_id": 45, 'something':'a'}, {"_id": 46, 'something': 'b'}]
+        persistence_gateway.all_records = MagicMock(return_value=files)
+        for audio_file_type in audio_file_types:
+            actual_files = audio_file_service.get_files(audio_file_type)
+            call_args = persistence_gateway.all_records.call_args.args
+            assert actual_files == files
+            assert call_args[0] == (audio_file_type)
+
+
+
 
 
