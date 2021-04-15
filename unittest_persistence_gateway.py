@@ -68,9 +68,9 @@ class AppTests(unittest.TestCase):
         persistence_gateway.add(collection_name, 2, body_data2)
         first_entry = persistence_gateway.get(collection_name, 1)
         second_entry = persistence_gateway.get(collection_name, 2)
-        assert(len(persistence_gateway.all_records(collection_name))) == 2
-        assert(first_entry in persistence_gateway.all_records(collection_name))
-        assert (second_entry in persistence_gateway.all_records(collection_name))
+        assert (len(persistence_gateway.get_all(collection_name))) == 2
+        assert(first_entry in persistence_gateway.get_all(collection_name))
+        assert (second_entry in persistence_gateway.get_all(collection_name))
 
 
 

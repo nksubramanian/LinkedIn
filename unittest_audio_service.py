@@ -95,10 +95,10 @@ class AudioServiceTests(unittest.TestCase):
         persistence_gateway = PersistenceGateway(mongo_client)
         audio_file_service = AudioFileService(persistence_gateway)
         files = [{"_id": 45, 'something':'a'}, {"_id": 46, 'something': 'b'}]
-        persistence_gateway.all_records = MagicMock(return_value=files)
+        persistence_gateway.get_all = MagicMock(return_value=files)
         for audio_file_type in audio_file_types:
             actual_files = audio_file_service.get_files(audio_file_type)
-            call_args = persistence_gateway.all_records.call_args.args
+            call_args = persistence_gateway.get_all.call_args.args
             assert actual_files == files
             assert call_args[0] == (audio_file_type)
 
