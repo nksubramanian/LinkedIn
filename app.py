@@ -36,4 +36,13 @@ def create_app(service):
         except Exception as error:
             return error.args[0], 500
 
+    @app.route("/<string:audio_file_type>", methods=['GET'])
+    def get_audio_files(audio_file_type):
+        x = app.service.get_files(audio_file_type)
+        return x
+
+
+
     return app
+
+

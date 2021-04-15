@@ -50,6 +50,10 @@ class AudioBookHandler:
         filtered_creation_request = dict((key, value) for key, value in creation_request.items() if key in {"title", "author","narrator","duration","uploaded_time"})
         return filtered_creation_request
 
+    def get_audio_files(self):
+        return self.persistence_gateway.all_records(self.collection)
+
+
 
 
 class SongHandler:
@@ -92,6 +96,9 @@ class SongHandler:
     def __filter_audio_file(self, creation_request):
         filtered_creation_request = dict((key, value) for key, value in creation_request.items() if key in {"name", "duration", "uploaded_time"})
         return filtered_creation_request
+
+    def get_audio_files(self):
+        return self.persistence_gateway.all_records(self.collection)
 
 
 class PodcastHandler:
@@ -145,4 +152,7 @@ class PodcastHandler:
     def __filter_audio_file(self, creation_request):
         filtered_creation_request = dict((key, value) for key, value in creation_request.items() if key in {"name", "duration", "uploaded_time", "host", "participants"})
         return filtered_creation_request
+
+    def get_audio_files(self):
+        return self.persistence_gateway.all_records(self.collection)
 

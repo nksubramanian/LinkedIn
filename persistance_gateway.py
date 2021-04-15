@@ -25,6 +25,13 @@ class PersistenceGateway:
         if result.deleted_count == 0:
             raise ItemNotFound()
 
+    def all_records(self, collection):
+        temp = []
+        for doc in self.mydb[collection].find():
+            doc['id'] = doc.pop('_id')
+            temp.append(doc)
+        return str(temp)
+
 
 class UnableToInsertDueToDuplicateKeyError(Exception):
     pass

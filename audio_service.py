@@ -40,6 +40,10 @@ class AudioFileService:
         except ItemNotFound as error:
             raise UserInputError("Item to be deleted is not found")
 
+    def get_files(self, audio_file_type):
+        audio_file_handler = self.__create_audio_file_handler(audio_file_type, self.persistence_gateway)
+        return audio_file_handler.get_audio_files()
+
 
 
 
