@@ -7,7 +7,7 @@ from flask import jsonify
 
 
 class AppTests(unittest.TestCase):
-    def test_successful_add_method_db(self):
+    def test_add(self):
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date':'wef'}
         collection_name = 'collection_name'
         client = mongomock.MongoClient()
@@ -15,7 +15,18 @@ class AppTests(unittest.TestCase):
         persistence_gateway.add(collection_name, 3232, body_data)
         assert client.mydatabase[collection_name].find_one({'_id': 3232}) == body_data
 
-    def test_successful_get_method_db(self):
+    def test_update(self):
+        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date':'wef'}
+        collection_name = 'collection_name'
+        client = mongomock.MongoClient()
+        persistence_gateway = PersistenceGateway(client)
+        persistence_gateway.add(collection_name, 3232, body_data)
+        new_data = {'name': 'xxx'}
+        persistence_gateway.update(collection_name, 3232, new_data)
+        from_db = client.mydatabase[collection_name].find_one({'_id': 3232})
+        assert from_db == new_data
+
+    def test_get(self):
         body_data = {'_id': 56, 'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date':'wef'}
         client = mongomock.MongoClient()
         collection_name = 'collection_name'
@@ -24,7 +35,7 @@ class AppTests(unittest.TestCase):
         body_data['id'] = body_data.pop('_id')
         assert body_data == persistence_gateway.get(collection_name, 56)
 
-    def test_successful_delete_method_db(self):
+    def test_delete(self):
         body_data = {'_id': 56, 'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date':'wef'}
         client = mongomock.MongoClient()
         persistence_gateway = PersistenceGateway(client)
@@ -35,7 +46,7 @@ class AppTests(unittest.TestCase):
         assert find_result is None
 
 
-    def test_failure_for_duplicate_creation(self):
+    def test_add_duplicate(self):
         body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date': 'wef'}
         collection_name = 'collection_name'
         client = mongomock.MongoClient()
@@ -44,21 +55,29 @@ class AppTests(unittest.TestCase):
         with self.assertRaises(UnableToInsertDueToDuplicateKeyError):
             persistence_gateway.add(collection_name, 3232, body_data)
 
-    def test_failure_for_invalid_get(self):
+    def test_get_invalid(self):
         collection_name = 'collection_name'
         client = mongomock.MongoClient()
         persistence_gateway = PersistenceGateway(client)
         with self.assertRaises(ItemNotFound):
             persistence_gateway.get(collection_name, 3422)
 
-    def test_failure_for_invalid_delete(self):
+    def test_delete_invalid(self):
         collection_name = 'collection_name'
         client = mongomock.MongoClient()
         persistence_gateway = PersistenceGateway(client)
         with self.assertRaises(ItemNotFound):
             persistence_gateway.delete(collection_name, 3422)
 
-    def test_all_records(self):
+    def test_update_invalid(self):
+        body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date': 'wef'}
+        collection_name = 'collection_name'
+        client = mongomock.MongoClient()
+        persistence_gateway = PersistenceGateway(client)
+        with self.assertRaises(ItemNotFound):
+            persistence_gateway.update(collection_name, 3232, body_data)
+
+    def test_get_all(self):
         body_data1 = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date':'wef'}
         body_data2 = {'name': 'bsd', 'duration': 44, 'uploaded_time': 'gfdb', 'date': 'wefgs'}
         collection_name = 'collection_name'
