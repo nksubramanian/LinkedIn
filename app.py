@@ -9,6 +9,10 @@ def create_app(service):
     app = Flask(__name__)
     app.service = service
 
+    @app.route("/<string:audio_file_type>/<int:audio_file_id>", methods=['PUT'])
+    def updated_audio_file(audio_file_type, audio_file_id):
+        return "updated"
+
     @app.route("/<string:audio_file_type>/<int:audio_file_id>", methods=['POST'])
     def create_audio_file(audio_file_type, audio_file_id):
         try:
@@ -42,7 +46,10 @@ def create_app(service):
     @app.route("/<string:audio_file_type>", methods=['GET'])
     def get_audio_files(audio_file_type):
         x = app.service.get_files(audio_file_type)
+        print(x)
         y = jsonify(x)
+        print("---")
+        print(y)
         return y
 
 

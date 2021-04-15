@@ -121,6 +121,20 @@ class AppTests(unittest.TestCase):
             assert response.status_code == 200
             self.assert_method_called_once_with_params(self, app.service.delete_file, (scenario, 66))
 
+    def test_successful_get_files(self):
+        scenarios = ["song", "podcast", "audiobook"]
+        for scenario in scenarios:
+            app = create_app(AudioFileService(None))
+            app.service.get_files = MagicMock(return_value=[{"a": "b"}, {"c":" d"}])
+            tester = app.test_client(self)
+            response = tester.get(f"/{scenario}")
+            response_message = response.stream.response.data.decode("UTF-8")
+            assert eval(response_message) == [{"a": "b"}, {"c": " d"}]
+            assert response.status_code == 200
+            self.assert_method_called_once_with_params(self, app.service.get_files, (scenario,))
+
+
+
     @staticmethod
     def assert_method_called_once_with_params(self, method, expected_params):
         method.assert_called_once()
