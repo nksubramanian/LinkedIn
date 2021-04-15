@@ -59,7 +59,8 @@ class SongHandler:
 
     def add_audio_file(self, audio_file_id, creation_request):
         self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
-        self.persistence_gateway.add(self.collection, audio_file_id, creation_request)
+        filtered_creation_request = self.__filter_audio_file(creation_request)
+        self.persistence_gateway.add(self.collection, audio_file_id, filtered_creation_request)
 
     @staticmethod
     def __assert_creation_parameters_are_correct(audio_file_id, r):
@@ -88,6 +89,10 @@ class SongHandler:
     def delete_audio_file(self, audio_file_id):
         return self.persistence_gateway.delete(self.collection, audio_file_id)
 
+    def __filter_audio_file(self, creation_request):
+        filtered_creation_request = dict((key, value) for key, value in creation_request.items() if key in {"name", "duration", "uploaded_time"})
+        return filtered_creation_request
+
 
 class PodcastHandler:
     def __init__(self, persistence_gateway):
@@ -96,7 +101,9 @@ class PodcastHandler:
 
     def add_audio_file(self, audio_file_id, creation_request):
         self.__assert_creation_parameters_are_correct(audio_file_id, creation_request)
-        self.persistence_gateway.add(self.collection, audio_file_id, creation_request)
+        filtered_creation_request = self.__filter_audio_file(creation_request)
+        self.persistence_gateway.add(self.collection, audio_file_id, filtered_creation_request)
+
 
     @staticmethod
     def __assert_creation_parameters_are_correct(audio_file_id, r):
@@ -134,3 +141,8 @@ class PodcastHandler:
 
     def delete_audio_file(self, audio_file_id):
         return self.persistence_gateway.delete(self.collection, audio_file_id)
+
+    def __filter_audio_file(self, creation_request):
+        filtered_creation_request = dict((key, value) for key, value in creation_request.items() if key in {"name", "duration", "uploaded_time", "host", "participants"})
+        return filtered_creation_request
+
