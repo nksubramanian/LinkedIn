@@ -30,7 +30,7 @@ class PersistenceGateway:
         for doc in self.mydb[collection].find():
             doc['id'] = doc.pop('_id')
             temp.append(doc)
-        return str(temp)
+        return temp
 
 
 class UnableToInsertDueToDuplicateKeyError(Exception):

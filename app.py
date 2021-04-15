@@ -1,5 +1,7 @@
 from flask import Flask, request
 from business_errors import UserInputError
+from flask import jsonify
+import flask
 
 
 def create_app(service):
@@ -39,9 +41,7 @@ def create_app(service):
     @app.route("/<string:audio_file_type>", methods=['GET'])
     def get_audio_files(audio_file_type):
         x = app.service.get_files(audio_file_type)
-        return x
-
-
+        return jsonify(x)
 
     return app
 
