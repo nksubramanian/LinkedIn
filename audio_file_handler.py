@@ -8,15 +8,15 @@ class Handler:
         self.persistence_gateway = persistence_gateway
 
     @abstractmethod
-    def _assert_creation_parameters_are_correct(self, creation_parameters):
+    def _assert_creation_parameters_are_correct(self, creation_parameters):  # pragma: no cover
         pass
 
     @abstractmethod
-    def _get_valid_properties(self):
+    def _get_valid_properties(self):  # pragma: no cover
         pass
 
     @abstractmethod
-    def _get_collection(self):
+    def _get_collection(self):  # pragma: no cover
         pass
 
     def __filter_audio_file(self, creation_request):

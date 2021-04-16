@@ -13,12 +13,12 @@ class SongCreationParameterTests(unittest.TestCase, AudioServiceTestBase):
     def get_tests(self):
         return [
             ("song",
-             "Name cannot be a blank string",
+             "name is mandatory",
              {'name': '', 'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"},
              4),
 
             ("song",
-             "Name cannot be a blank string",
+             "name is mandatory",
              {'name': '  ', 'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"},
              4),
 
@@ -28,26 +28,26 @@ class SongCreationParameterTests(unittest.TestCase, AudioServiceTestBase):
              "t"),
 
             ("song",
-             "Name of the song is mandatory",
+             "name is mandatory",
              {'namea': 'gh', 'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"},
              4),
 
             ("song",
-             "Name cannot be greater than 100 characters",
+             "name's max length is 100",
              {
-                 'name': 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz',
+                 'name': 'a' * 101,
                  'duration': 45,
                  'uploaded_time': "2034-06-01 01:10:20"
              },
              4),
 
             ("song",
-             "Duration of the song is mandatory",
+             "duration is mandatory",
              {'name': 'gh', 'ruration': 45, 'uploaded_time': "2034-06-01 01:10:20"},
              4),
 
             ("song",
-             "duration has to be integer",
+             "duration has to be a integer",
              {'name': 'gh', 'duration': '4e5', 'uploaded_time': "2034-06-01 01:10:20"},
              4),
 
@@ -72,9 +72,14 @@ class SongCreationParameterTests(unittest.TestCase, AudioServiceTestBase):
              4),
 
             ("song",
-             "Name has to be a string",
+             "name has to be a string",
              {'name': 34, 'duration': -45, 'uploaded_time': "2012-06-01 01:10:20"},
-             4)
+             4),
+
+            ("song",
+             "uploaded_time needs to be in string format ex.2034-06-01 01:10:20",
+             {'name': 'sss', 'duration': 45, 'uploaded_time': "2034-06-01a 01:10:20"},
+             4),
         ]
 
     def test_parameter(self):
