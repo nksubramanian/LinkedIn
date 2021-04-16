@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from datetime import datetime
 from business_errors import UserInputError
 
@@ -5,13 +6,18 @@ from business_errors import UserInputError
 class Handler:
     def __init__(self, persistence_gateway):
         self.persistence_gateway = persistence_gateway
-        self.collection = ""
 
+    @abstractmethod
     def _assert_creation_parameters_are_correct(self, creation_parameters):
-        raise NotImplementedError()
+        pass
 
+    @abstractmethod
     def _get_valid_properties(self):
-        raise NotImplementedError()
+        pass
+
+    @abstractmethod
+    def _get_collection(self):
+        pass
 
     def __filter_audio_file(self, creation_request):
         valid_properties = self._get_valid_properties()
@@ -21,29 +27,31 @@ class Handler:
     def update_audio_file(self, audio_file_id, creation_request):
         self._assert_creation_parameters_are_correct(creation_request)
         filtered_creation_request = self.__filter_audio_file(creation_request)
-        self.persistence_gateway.update(self.collection, audio_file_id, filtered_creation_request)
+        self.persistence_gateway.update(self._get_collection(), audio_file_id, filtered_creation_request)
 
     def add_audio_file(self, audio_file_id, creation_request):
         if type(audio_file_id) is not int:
             raise UserInputError("Audio file Id has to be an integer")
         self._assert_creation_parameters_are_correct(creation_request)
         filtered_creation_request = self.__filter_audio_file(creation_request)
-        self.persistence_gateway.add(self.collection, audio_file_id, filtered_creation_request)
+        self.persistence_gateway.add(self._get_collection(), audio_file_id, filtered_creation_request)
 
     def get_audio_file(self, audio_file_id):
-        return self.persistence_gateway.get(self.collection, audio_file_id)
+        return self.persistence_gateway.get(self._get_collection(), audio_file_id)
 
     def delete_audio_file(self, audio_file_id):
-        self.persistence_gateway.delete(self.collection, audio_file_id)
+        self.persistence_gateway.delete(self._get_collection(), audio_file_id)
 
     def get_audio_files(self):
-        return self.persistence_gateway.get_all(self.collection)
+        return self.persistence_gateway.get_all(self._get_collection())
 
 
 class AudioBookHandler(Handler):
     def __init__(self, persistence_gateway):
         super(AudioBookHandler, self).__init__(persistence_gateway)
-        self.collection = "audiobook"
+
+    def _get_collection(self):
+        return "audiobook"
 
     def _get_valid_properties(self):
         return {"title", "author", "narrator", "duration", "uploaded_time"}
@@ -79,7 +87,9 @@ class AudioBookHandler(Handler):
 class SongHandler(Handler):
     def __init__(self, persistence_gateway):
         super(SongHandler, self).__init__(persistence_gateway)
-        self.collection = "song"
+
+    def _get_collection(self):
+        return "song"
 
     def _assert_creation_parameters_are_correct(self, r):
         if 'name' not in r.keys():
@@ -112,7 +122,9 @@ class SongHandler(Handler):
 class PodcastHandler(Handler):
     def __init__(self, persistence_gateway):
         super(PodcastHandler, self).__init__(persistence_gateway)
-        self.collection = 'podcast'
+
+    def _get_collection(self):
+        return "podcast"
 
     def _assert_creation_parameters_are_correct(self, r):
         if 'name' not in r.keys():
