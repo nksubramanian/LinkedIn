@@ -1,5 +1,11 @@
 Creation validation tests (podcast and audiobook)
+    40 mins pod cast
+    60 mins audio book
+    10 mins songs
+    10 mins verify if any thing is missed from the document (list out what is missed)
 business negative tests (exception scenario)
+    60 mins
+
 proper use of sub tests
 For all tests use setup and teardown
 
