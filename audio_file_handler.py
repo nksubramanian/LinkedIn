@@ -24,6 +24,8 @@ class Handler:
         self.persistence_gateway.update(self.collection, audio_file_id, filtered_creation_request)
 
     def add_audio_file(self, audio_file_id, creation_request):
+        if type(audio_file_id) is not int:
+            raise UserInputError("Audio file Id has to be an integer")
         self._assert_creation_parameters_are_correct(creation_request)
         filtered_creation_request = self.__filter_audio_file(creation_request)
         self.persistence_gateway.add(self.collection, audio_file_id, filtered_creation_request)
@@ -82,6 +84,8 @@ class SongHandler(Handler):
     def _assert_creation_parameters_are_correct(self, r):
         if 'name' not in r.keys():
             raise UserInputError("Name of the song is mandatory")
+        if (type(r['name'])) is not str:
+            raise UserInputError("Name has to be a string")
         if len(r['name']) > 100:
             raise UserInputError("Name cannot be greater than 100 characters")
         if 'duration' not in r.keys():
