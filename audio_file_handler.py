@@ -58,11 +58,11 @@ class AudioBookHandler(Handler):
 
     def _assert_creation_parameters_are_correct(self, creation_parameters):
         if 'title' not in creation_parameters.keys():
-            raise UserInputError("Name of the song is mandatory")
+            raise UserInputError("Title is mandatory")
         if len(creation_parameters['title']) > 100:
             raise UserInputError("Title cannot be greater than 100 characters")
         if 'author' not in creation_parameters.keys():
-            raise UserInputError("Name of the song is mandatory")
+            raise UserInputError("Author is mandatory")
         if len(creation_parameters['author']) > 100:
             print(creation_parameters['author'])
             raise UserInputError("Author cannot be greater than 100 characters")
