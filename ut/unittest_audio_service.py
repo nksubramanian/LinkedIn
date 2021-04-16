@@ -85,13 +85,18 @@ class AudioServiceTests(unittest.TestCase):
                              'host': 'abced',
                              "participants": ["ac", "ca"]}
         audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": 34}
-        audioservice = AudioFileService()
-        audioservice.persistence_gateway.delete_song = MagicMock(return_value=song_body_data)
-        audioservice.persistence_gateway.delete_podcast = MagicMock(return_value=podcast_body_data)
-        audioservice.persistence_gateway.delete_audiobook = MagicMock(return_value=audiobook_body_data)
-        assert audioservice.delete_file("song", 9999) == song_body_data
-        assert audioservice.delete_file("podcast", 9999) == podcast_body_data
-        assert audioservice.delete_file("audiobook", 9999) == audiobook_body_data
+        audio_file_types = ["song", "audiobook", "podcast"]
+        database_uri = "mongodb_uri"
+        mongo_client = MongoClient(database_uri)
+        persistence_gateway = PersistenceGateway(mongo_client)
+        audio_file_service = AudioFileService(persistence_gateway)
+        persistence_gateway.delete = MagicMock(return_value=None)
+        for audio_file_type in audio_file_types:
+            assert audio_file_service.delete_file(audio_file_type, 45) is None
+            call_args = persistence_gateway.delete.call_args.args
+            assert call_args[0] == (audio_file_type)
+
+
 
     def test_get_files(self):
         audio_file_types = ["song", "audiobook", "podcast"]

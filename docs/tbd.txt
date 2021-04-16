@@ -39,7 +39,6 @@ Business unit tests
     Database Error in get Audiobook (un expected)
     Database Error in get Podcast (un expected)
 
-measure coverage
 proper use of sub tests
 For all tests use setup and teardown
 
