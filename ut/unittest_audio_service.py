@@ -18,7 +18,7 @@ l = [
     ("song", "duration has to be integer", {'name': 'gh', 'duration': '4e5', 'uploaded_time': "2034-06-01 01:10:20"}, 4),
     ("song", "duration has to be a positive integer", {'name': 'gh', 'duration': -45, 'uploaded_time': "2034-06-01 01:10:20"}, 4),
     ("song", "uploaded_time is mandatory", {'name': 'gh', 'duration': 45, '1uploaded_time': "2034-06-01 01:10:20"}, 4),
-    ("song", "date needs to be in string format", {'name': 'gh', 'duration': 45, 'uploaded_time':  [2032, 3, 4]}, 4),
+    ("song", "date needs to be in string format ex. 2034-06-01 01:10:20", {'name': 'gh', 'duration': 45, 'uploaded_time':  [2032, 3, 4]}, 4),
     ("song", "duration has to be a positive integer", {'name': 'gh', 'duration': -45, 'uploaded_time': "2012-06-01 01:10:20"}, 4),
     ("song", "Name has to be a string", {'name': 34, 'duration': -45, 'uploaded_time': "2012-06-01 01:10:20"}, 4)
      ]
