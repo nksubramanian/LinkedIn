@@ -63,7 +63,7 @@ class PodcastCreationParameterTests(unittest.TestCase, AudioServiceTestBase):
               "participants": ["ac", "ca"]},
              4),
             ("podcast",
-             "uploaded_time needs to be in string format",
+             "uploaded_time needs to be in string format ex.2034-06-01 01:10:20",
              {"name": "aaa", "duration": 45, "uploaded_time": [1,2], "host": "abcdefgh",
               "participants": ["ac", "ca"]},
              4),

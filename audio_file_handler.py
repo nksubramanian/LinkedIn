@@ -64,7 +64,6 @@ class AudioBookHandler(Handler):
         if 'author' not in creation_parameters.keys():
             raise UserInputError("Author is mandatory")
         if len(creation_parameters['author']) > 100:
-            print(creation_parameters['author'])
             raise UserInputError("Author cannot be greater than 100 characters")
         if 'narrator' not in creation_parameters.keys():
             raise UserInputError("Narrator is mandatory")
@@ -77,11 +76,11 @@ class AudioBookHandler(Handler):
         if creation_parameters['duration'] < 0:
             raise UserInputError("duration has to be a positive integer")
         if 'uploaded_time' not in creation_parameters.keys():
-            raise UserInputError("date is mandatory")
+            raise UserInputError("uploaded_time is mandatory")
         if type(creation_parameters['uploaded_time']) != str:
-            raise UserInputError("date needs to be in string format")
+            raise UserInputError("uploaded_time needs to be in string format ex.2034-06-01 01:10:20")
         if datetime.now() > datetime.fromisoformat(creation_parameters['uploaded_time']):
-            raise UserInputError("date cannot be in the past")
+            raise UserInputError("uploaded_time cannot be in the past")
 
 
 class SongHandler(Handler):
@@ -111,9 +110,9 @@ class SongHandler(Handler):
         if 'uploaded_time' not in r.keys():
             raise UserInputError("uploaded_time is mandatory")
         if type(r['uploaded_time']) != str:
-            raise UserInputError("date needs to be in string format ex.2034-06-01 01:10:20")
+            raise UserInputError("uploaded_time needs to be in string format ex.2034-06-01 01:10:20")
         if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
-            raise UserInputError("date cannot be in the past")
+            raise UserInputError("uploaded_time cannot be in the past")
 
     def _get_valid_properties(self):
         return {"name", "duration", "uploaded_time"}
@@ -146,7 +145,7 @@ class PodcastHandler(Handler):
         if 'uploaded_time' not in r.keys():
             raise UserInputError("uploaded_time is mandatory")
         if type(r['uploaded_time']) != str:
-            raise UserInputError("uploaded_time needs to be in string format")
+            raise UserInputError("uploaded_time needs to be in string format ex.2034-06-01 01:10:20")
         if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
             raise UserInputError("uploaded_time cannot be in the past")
         if 'host' not in r.keys():

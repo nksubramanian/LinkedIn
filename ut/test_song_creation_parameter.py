@@ -62,7 +62,7 @@ class SongCreationParameterTests(unittest.TestCase, AudioServiceTestBase):
              4),
 
             ("song",
-             "date needs to be in string format ex.2034-06-01 01:10:20",
+             "uploaded_time needs to be in string format ex.2034-06-01 01:10:20",
              {'name': 'gh', 'duration': 45, 'uploaded_time': [2032, 3, 4]},
              4),
 
