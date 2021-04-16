@@ -1,10 +1,5 @@
 import unittest
 from unittest.mock import MagicMock
-
-from mongomock import MongoClient
-
-from audio_service import AudioFileService
-from persistance_gateway import PersistenceGateway
 from ut.audio_service_test_base import AudioServiceTestBase
 
 
@@ -48,18 +43,19 @@ class AudioServiceTests(unittest.TestCase, AudioServiceTestBase):
 
     def test_delete_file(self):
         audio_file_types = ["song", "audiobook", "podcast"]
-        self.gateway.delete = MagicMock(return_value=None)
         for audio_file_type in audio_file_types:
+            self.gateway.delete = MagicMock(return_value=None)
             assert self.service.delete_file(audio_file_type, 45) is None
             call_args = self.gateway.delete.call_args.args
-            assert call_args[0] == (audio_file_type)
+            assert call_args[0] == audio_file_type
+            assert call_args[1] == 45
 
     def test_get_files(self):
         audio_file_types = ["song", "audiobook", "podcast"]
-        files = [{"_id": 45, 'something': 'a'}, {"_id": 46, 'something': 'b'}]
-        self.gateway.get_all = MagicMock(return_value=files)
+        files = [{"id": 45, 'something': 'a'}, {"id": 46, 'something': 'b'}]
         for audio_file_type in audio_file_types:
+            self.gateway.get_all = MagicMock(return_value=files)
             actual_files = self.service.get_files(audio_file_type)
             call_args = self.gateway.get_all.call_args.args
             assert actual_files == files
-            assert call_args[0] == (audio_file_type)
+            assert call_args[0] == audio_file_type
