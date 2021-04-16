@@ -151,10 +151,10 @@ class PodcastHandler(Handler):
             raise UserInputError("uploaded_time cannot be in the past")
         if 'host' not in r.keys():
             raise UserInputError("Host is mandatory")
-        if len(r['host']) > 100:
-            raise UserInputError("Host cannot be greater than 100 characters")
         if type(r['host']) is not str:
             raise UserInputError("Host has to be a string")
+        if len(r['host']) > 100:
+            raise UserInputError("Host cannot be greater than 100 characters")
         if 'participants' in r.keys():
             if type(r['participants']) != list:
                 raise UserInputError("participants has to be a list")
