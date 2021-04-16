@@ -167,3 +167,24 @@ class AudioServiceTests(unittest.TestCase, AudioServiceTestBase):
             call_args = self.gateway.delete.call_args.args
             assert call_args[0] == audio_file_type
             assert call_args[1] == 45
+
+    def test_update_invalid_audio_file(self):
+        tests = [
+            ("song", 999, {'name': 'b', 'duration': 4, 'uploaded_time': '2031-04-14 14:41:32'}),
+            ("podcast", 999, {'name': 'gh',
+                              'duration': 45,
+                              'uploaded_time': '2031-04-14 14:41:32',
+                              'host': 'abced',
+                              "participants": ["ac", "ca"]}),
+            ("audiobook", 999, {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78,
+                                "uploaded_time": '2031-04-14 14:41:32'})
+        ]
+
+        for test in tests:
+            self.gateway.update = MagicMock(side_effect=ItemNotFound)
+            with self.assertRaises(UserInputError):
+                self.service.update_audio_file(test[0], test[1], test[2])
+            args = self.gateway.update.call_args.args
+            assert args[0] == test[0]
+            assert args[1] == test[1]
+            assert args[2] == test[2]
