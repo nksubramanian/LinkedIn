@@ -45,6 +45,38 @@ class Handler:
     def get_audio_files(self):
         return self.persistence_gateway.get_all(self._get_collection())
 
+    def _assert_property_is_valid_string(self, dictionary, property_name, max_length):
+        if property_name not in dictionary.keys():
+            raise UserInputError(f"{property_name} is mandatory")
+        val = dictionary[property_name]
+        if type(val) != str:
+            raise UserInputError(f"{property_name} has to be a string")
+        if val.isspace():
+            raise UserInputError(f"{property_name} is mandatory")
+        if len(val) > max_length:
+            raise UserInputError(f"{property_name}'s max length is {max_length}")
+        if len(val) == 0:
+            raise UserInputError(f"{property_name} is mandatory")
+
+    def _assert_property_is_positive_integer(self, dictionary, property_name):
+        if property_name not in dictionary.keys():
+            raise UserInputError(f"{property_name} is mandatory")
+        val = dictionary[property_name]
+        if type(val) != int:
+            raise UserInputError(f"{property_name} has to be a integer")
+        if val <= 0:
+            raise UserInputError(f"{property_name} has to be a positive integer")
+
+    def _assert_property_is_valid_datetime_string(self, r, property_name):
+        if property_name not in r.keys():
+            raise UserInputError(f"{property_name} is mandatory")
+        if type(r[property_name]) != str:
+            raise UserInputError(f"{property_name} needs to be in string format ex.2034-06-01 01:10:20")
+        try:
+            if datetime.now() > datetime.fromisoformat(r[property_name]):
+                raise UserInputError(f"{property_name} cannot be in the past")
+        except ValueError:
+            raise UserInputError(f"{property_name} needs to be in string format ex.2034-06-01 01:10:20")
 
 class AudioBookHandler(Handler):
     def __init__(self, persistence_gateway):
@@ -57,30 +89,11 @@ class AudioBookHandler(Handler):
         return {"title", "author", "narrator", "duration", "uploaded_time"}
 
     def _assert_creation_parameters_are_correct(self, creation_parameters):
-        if 'title' not in creation_parameters.keys():
-            raise UserInputError("Title is mandatory")
-        if len(creation_parameters['title']) > 100:
-            raise UserInputError("Title cannot be greater than 100 characters")
-        if 'author' not in creation_parameters.keys():
-            raise UserInputError("Author is mandatory")
-        if len(creation_parameters['author']) > 100:
-            raise UserInputError("Author cannot be greater than 100 characters")
-        if 'narrator' not in creation_parameters.keys():
-            raise UserInputError("Narrator is mandatory")
-        if len(creation_parameters['narrator']) > 100:
-            raise UserInputError("Narrator cannot be greater than 100 characters")
-        if 'duration' not in creation_parameters.keys():
-            raise UserInputError("Duration of the song is mandatory")
-        if type(creation_parameters['duration']) != int:
-            raise UserInputError("duration has to be integer")
-        if creation_parameters['duration'] < 0:
-            raise UserInputError("duration has to be a positive integer")
-        if 'uploaded_time' not in creation_parameters.keys():
-            raise UserInputError("uploaded_time is mandatory")
-        if type(creation_parameters['uploaded_time']) != str:
-            raise UserInputError("uploaded_time needs to be in string format ex.2034-06-01 01:10:20")
-        if datetime.now() > datetime.fromisoformat(creation_parameters['uploaded_time']):
-            raise UserInputError("uploaded_time cannot be in the past")
+        self._assert_property_is_valid_string(creation_parameters, 'title', 100)
+        self._assert_property_is_valid_string(creation_parameters, 'author', 100)
+        self._assert_property_is_valid_string(creation_parameters, 'narrator', 100)
+        self._assert_property_is_positive_integer(creation_parameters, 'duration')
+        self._assert_property_is_valid_datetime_string(creation_parameters, 'uploaded_time')
 
 
 class SongHandler(Handler):
@@ -91,28 +104,9 @@ class SongHandler(Handler):
         return "song"
 
     def _assert_creation_parameters_are_correct(self, r):
-        if 'name' not in r.keys():
-            raise UserInputError("Name of the song is mandatory")
-        if (type(r['name'])) is not str:
-            raise UserInputError("Name has to be a string")
-        if len(r['name']) > 100:
-            raise UserInputError("Name cannot be greater than 100 characters")
-        if len(r['name']) == r['name'].count(" "):
-            raise UserInputError("Name cannot be a blank string")
-        if r['name'] == "":
-            raise UserInputError("Name cannot be a blank string")
-        if 'duration' not in r.keys():
-            raise UserInputError("Duration of the song is mandatory")
-        if type(r['duration']) != int:
-            raise UserInputError("duration has to be integer")
-        if r['duration'] < 0:
-            raise UserInputError("duration has to be a positive integer")
-        if 'uploaded_time' not in r.keys():
-            raise UserInputError("uploaded_time is mandatory")
-        if type(r['uploaded_time']) != str:
-            raise UserInputError("uploaded_time needs to be in string format ex.2034-06-01 01:10:20")
-        if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
-            raise UserInputError("uploaded_time cannot be in the past")
+        self._assert_property_is_valid_string(r, 'name', 100)
+        self._assert_property_is_positive_integer(r, 'duration')
+        self._assert_property_is_valid_datetime_string(r, 'uploaded_time')
 
     def _get_valid_properties(self):
         return {"name", "duration", "uploaded_time"}
@@ -126,34 +120,10 @@ class PodcastHandler(Handler):
         return "podcast"
 
     def _assert_creation_parameters_are_correct(self, r):
-        if 'name' not in r.keys():
-            raise UserInputError("Name of the podcast is mandatory")
-        if type(r['name']) is not str:
-            raise UserInputError("Name has to be a string")
-        if r['name'] == '':
-            raise UserInputError("Name of the podcast is mandatory")
-        if r['name'].count(" ") == len(r['name']):
-            raise UserInputError("Name of the podcast is mandatory")
-        if len(r['name']) > 100:
-            raise UserInputError("Name cannot be greater than 100 characters")
-        if 'duration' not in r.keys():
-            raise UserInputError("Duration of the song is mandatory")
-        if type(r['duration']) != int:
-            raise UserInputError("duration has to be integer")
-        if r['duration'] < 0:
-            raise UserInputError("duration has to be a positive integer")
-        if 'uploaded_time' not in r.keys():
-            raise UserInputError("uploaded_time is mandatory")
-        if type(r['uploaded_time']) != str:
-            raise UserInputError("uploaded_time needs to be in string format ex.2034-06-01 01:10:20")
-        if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
-            raise UserInputError("uploaded_time cannot be in the past")
-        if 'host' not in r.keys():
-            raise UserInputError("Host is mandatory")
-        if type(r['host']) is not str:
-            raise UserInputError("Host has to be a string")
-        if len(r['host']) > 100:
-            raise UserInputError("Host cannot be greater than 100 characters")
+        self._assert_property_is_valid_string(r, 'name', 100)
+        self._assert_property_is_positive_integer(r, 'duration')
+        self._assert_property_is_valid_datetime_string(r, 'uploaded_time')
+        self._assert_property_is_valid_string(r, 'host', 100)
         if 'participants' in r.keys():
             if type(r['participants']) != list:
                 raise UserInputError("participants has to be a list")
