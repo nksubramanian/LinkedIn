@@ -47,34 +47,19 @@ class AudioServiceTests(unittest.TestCase, AudioServiceTestBase):
             assert call_args[0] == audio_file_type
 
     def test_delete_file(self):
-        song_body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date': 'wef'}
-        podcast_body_data = {'name': 'gh',
-                             'duration': 45,
-                             'uploaded_time': 1234,
-                             'host': 'abced',
-                             "participants": ["ac", "ca"]}
-        audiobook_body_data = {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78, "uploaded_time": 34}
         audio_file_types = ["song", "audiobook", "podcast"]
-        database_uri = "mongodb_uri"
-        mongo_client = MongoClient(database_uri)
-        persistence_gateway = PersistenceGateway(mongo_client)
-        audio_file_service = AudioFileService(persistence_gateway)
-        persistence_gateway.delete = MagicMock(return_value=None)
+        self.gateway.delete = MagicMock(return_value=None)
         for audio_file_type in audio_file_types:
-            assert audio_file_service.delete_file(audio_file_type, 45) is None
-            call_args = persistence_gateway.delete.call_args.args
+            assert self.service.delete_file(audio_file_type, 45) is None
+            call_args = self.gateway.delete.call_args.args
             assert call_args[0] == (audio_file_type)
 
     def test_get_files(self):
         audio_file_types = ["song", "audiobook", "podcast"]
-        database_uri = "mongodb_uri"
-        mongo_client = MongoClient(database_uri)
-        persistence_gateway = PersistenceGateway(mongo_client)
-        audio_file_service = AudioFileService(persistence_gateway)
         files = [{"_id": 45, 'something': 'a'}, {"_id": 46, 'something': 'b'}]
-        persistence_gateway.get_all = MagicMock(return_value=files)
+        self.gateway.get_all = MagicMock(return_value=files)
         for audio_file_type in audio_file_types:
-            actual_files = audio_file_service.get_files(audio_file_type)
-            call_args = persistence_gateway.get_all.call_args.args
+            actual_files = self.service.get_files(audio_file_type)
+            call_args = self.gateway.get_all.call_args.args
             assert actual_files == files
             assert call_args[0] == (audio_file_type)
