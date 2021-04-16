@@ -100,6 +100,16 @@ class PodcastCreationParameterTests(unittest.TestCase, AudioServiceTestBase):
              "participants can have maximum of 10 members",
              {"name": "aaa", "duration": 45, "uploaded_time": "2034-06-01 01:10:20", "host": "abcdefgh",
               "participants": ["1",  "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"]},
+             4),
+            ("podcast",
+             "Each member of the participant has to be string",
+             {"name": "aaa", "duration": 45, "uploaded_time": "2034-06-01 01:10:20", "host": "abcdefgh",
+              "participants": [1, "ca"]},
+             4),
+            ("podcast",
+             "maximum characters allowed for all participants in 100",
+             {"name": "aaa", "duration": 45, "uploaded_time": "2034-06-01 01:10:20", "host": "abcdefgh",
+              "participants": ["123"*34, "ca"]},
              4)
 
         ]
