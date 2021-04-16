@@ -157,3 +157,13 @@ class AudioServiceTests(unittest.TestCase, AudioServiceTestBase):
             call_args = self.gateway.get.call_args.args
             assert call_args[0] == audio_file_type
             assert call_args[1] == 45
+
+    def test_delete_invalid_file(self):
+        audio_file_types = ["song", "audiobook", "podcast"]
+        for audio_file_type in audio_file_types:
+            self.gateway.delete = MagicMock(side_effect=ItemNotFound)
+            with self.assertRaises(UserInputError):
+                self.service.delete_file(audio_file_type, 45)
+            call_args = self.gateway.delete.call_args.args
+            assert call_args[0] == audio_file_type
+            assert call_args[1] == 45
