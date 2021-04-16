@@ -84,6 +84,26 @@ class AudioServiceTests(unittest.TestCase, AudioServiceTestBase):
             assert actual_files == files
             assert call_args[0] == audio_file_type
 
+    def test_update_audio_file(self):
+        tests = [
+            ("song", 999, {'name': 'b', 'duration': 4, 'uploaded_time': '2031-04-14 14:41:32'}),
+            ("podcast", 999, {'name': 'gh',
+                              'duration': 45,
+                              'uploaded_time': '2031-04-14 14:41:32',
+                              'host': 'abced',
+                              "participants": ["ac", "ca"]}),
+            ("audiobook", 999, {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78,
+                                "uploaded_time": '2031-04-14 14:41:32'})
+        ]
+
+        for test in tests:
+            self.gateway.update = MagicMock(return_value=None)
+            assert self.service.update_audio_file(test[0], test[1], test[2]) is None
+            args = self.gateway.update.call_args.args
+            assert args[0] == test[0]
+            assert args[1] == test[1]
+            assert args[2] == test[2]
+
     def test_invalid_audio_type_get_files(self):
         with self.assertRaises(UserInputError):
             self.service.get_files("invalid file type")
