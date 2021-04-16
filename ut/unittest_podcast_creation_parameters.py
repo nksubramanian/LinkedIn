@@ -26,6 +26,11 @@ class PodcastCreationParameterTests(unittest.TestCase, AudioServiceTestBase):
              "Name of the podcast is mandatory",
              {"name": "  ", "duration": 45, "uploaded_time": "2034-06-01 01:10:20", "host": "abcdefgh",
               "participants": ["ac", "ca"]},
+             4),
+            ("podcast",
+             "Name of the podcast is mandatory",
+             {"name": "", "duration": 45, "uploaded_time": "2034-06-01 01:10:20", "host": "abcdefgh",
+              "participants": ["ac", "ca"]},
              4)
         ]
 

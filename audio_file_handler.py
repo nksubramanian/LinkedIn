@@ -117,7 +117,9 @@ class PodcastHandler(Handler):
     def _assert_creation_parameters_are_correct(self, r):
         if 'name' not in r.keys():
             raise UserInputError("Name of the podcast is mandatory")
-        if r['name'] is '':
+        if type(r['name']) is not str:
+            raise UserInputError("Name has to be a string")
+        if r['name'] == '':
             raise UserInputError("Name of the podcast is mandatory")
         if r['name'].count(" ") == len(r['name']):
             raise UserInputError("Name of the podcast is mandatory")
