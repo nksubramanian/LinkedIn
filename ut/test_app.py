@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import MagicMock
-import ut.unittest_helper as helper
 import business_errors
 from app import create_app
 from audio_service import AudioFileService
@@ -17,8 +16,8 @@ class AppTests(unittest.TestCase):
             tester = app.test_client(self)
             response = tester.post(f"/{scenario}/83662", json=body_data)
             res_message = response.stream.response.data.decode("UTF-8")
-            assert res_message == error_message, helper.assert_message(scenario, error_message, res_message)
-            assert response.status_code == 400, helper.assert_message(scenario, 400, response.status_code)
+            assert res_message == error_message
+            assert response.status_code == 400
             self.assert_method_called_once_with_params(self, app.service.add_audio_file, (scenario, 83662, body_data))
 
     def test_create_system_error(self):
