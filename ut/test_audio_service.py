@@ -1,7 +1,10 @@
 import unittest
 from unittest.mock import MagicMock
 
+from pymongo.errors import DuplicateKeyError
+
 from business_errors import UserInputError
+from persistance_gateway import UnableToInsertDueToDuplicateKeyError
 from ut.audio_service_test_base import AudioServiceTestBase
 
 
@@ -123,3 +126,24 @@ class AudioServiceTests(unittest.TestCase, AudioServiceTestBase):
     def test_invalid_audio_type_get_file(self):
         with self.assertRaises(UserInputError):
             self.service.get_file("invalid file type", 34)
+
+    def test_duplicate_add_audio_file(self):
+        tests = [
+            ("song", 999, {'name': 'b', 'duration': 4, 'uploaded_time': '2031-04-14 14:41:32'}),
+            ("podcast", 999, {'name': 'gh',
+                              'duration': 45,
+                              'uploaded_time': '2031-04-14 14:41:32',
+                              'host': 'abced',
+                              "participants": ["ac", "ca"]}),
+            ("audiobook", 999, {"title": "aaa", "author": "ds", "narrator": "ds", "duration": 78,
+                                "uploaded_time": '2031-04-14 14:41:32'})
+        ]
+
+        for test in tests:
+            self.gateway.add = MagicMock(side_effect=UnableToInsertDueToDuplicateKeyError)
+            with self.assertRaises(UserInputError):
+                self.service.add_audio_file(test[0], test[1], test[2])
+            args = self.gateway.add.call_args.args
+            assert args[0] == test[0]
+            assert args[1] == test[1]
+            assert args[2] == test[2]
