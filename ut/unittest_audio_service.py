@@ -34,20 +34,17 @@ class AudioServiceTests(unittest.TestCase, AudioServiceTestBase):
             assert args[1] == test[1]
             assert args[2] == test[2]
 
-
-    def test_get_file(self):
+    def test_get_audio_file(self):
         audio_file_types = ["song", "audiobook", "podcast"]
-        database_uri = "mongodb_uri"
-        mongo_client = MongoClient(database_uri)
-        persistence_gateway = PersistenceGateway(mongo_client)
-        audio_file_service = AudioFileService(persistence_gateway)
-        files = {"_id": 45, 'something': 'a'}
-        persistence_gateway.get = MagicMock(return_value=files)
+        files = {"id": 45, 'something': 'a'}
+        self.gateway.get = MagicMock(return_value=files)
         for audio_file_type in audio_file_types:
-            actual_files = audio_file_service.get_file(audio_file_type, 45)
-            call_args = persistence_gateway.get.call_args.args
+            actual_files = self.service.get_file(audio_file_type, 45)
+            call_args = self.gateway.get.call_args.args
             assert actual_files == files
-            assert call_args[0] == (audio_file_type)
+            print(files)
+            print(actual_files)
+            assert call_args[0] == audio_file_type
 
     def test_delete_file(self):
         song_body_data = {'name': 'b', 'duration': 4, 'uploaded_time': 'b', 'date': 'wef'}
