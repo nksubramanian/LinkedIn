@@ -8,7 +8,9 @@ from business_errors import UserInputError
 from persistance_gateway import PersistenceGateway
 
 l = [
-     ("song", "Audio file Id has to be an integer", {'name': 'gh', 'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"}, ""),
+     ("song", "Name cannot be a blank string", {'name': '', 'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"}, 4),
+     ("song", "Name cannot be a blank string", {'name': '  ', 'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"}, 4),
+     ("song", "Audio file Id has to be an integer", {'name': 'gh', 'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"}, "t"),
      ("song", "Name of the song is mandatory", {'namea': 'gh', 'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"}, 4),
      ("song", "Name cannot be greater than 100 characters", {'name': 'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz',
                                                              'duration': 45, 'uploaded_time': "2034-06-01 01:10:20"}, 4),

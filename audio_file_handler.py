@@ -88,6 +88,10 @@ class SongHandler(Handler):
             raise UserInputError("Name has to be a string")
         if len(r['name']) > 100:
             raise UserInputError("Name cannot be greater than 100 characters")
+        if len(r['name']) == r['name'].count(" "):
+            raise UserInputError("Name cannot be a blank string")
+        if r['name'] == "":
+            raise UserInputError("Name cannot be a blank string")
         if 'duration' not in r.keys():
             raise UserInputError("Duration of the song is mandatory")
         if type(r['duration']) != int:
