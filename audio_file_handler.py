@@ -101,7 +101,7 @@ class SongHandler(Handler):
         if 'uploaded_time' not in r.keys():
             raise UserInputError("uploaded_time is mandatory")
         if type(r['uploaded_time']) != str:
-            raise UserInputError("date needs to be in string format")
+            raise UserInputError("date needs to be in string format ex.2034-06-01 01:10:20")
         if datetime.now() > datetime.fromisoformat(r['uploaded_time']):
             raise UserInputError("date cannot be in the past")
 
