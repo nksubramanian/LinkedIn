@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
+
+from business_errors import UserInputError
 from ut.audio_service_test_base import AudioServiceTestBase
 
 
@@ -81,3 +83,23 @@ class AudioServiceTests(unittest.TestCase, AudioServiceTestBase):
             call_args = self.gateway.get_all.call_args.args
             assert actual_files == files
             assert call_args[0] == audio_file_type
+
+    def test_invalid_audio_type_get_files(self):
+        with self.assertRaises(UserInputError):
+            self.service.get_files("invalid file type")
+
+    def test_invalid_audio_type_add_file(self):
+        with self.assertRaises(UserInputError):
+            self.service.add_audio_file("invalid file type", 34, {'s': 's'})
+
+    def test_invalid_audio_type_delete_file(self):
+        with self.assertRaises(UserInputError):
+            self.service.delete_file("invalid file type", 34)
+
+    def test_invalid_audio_type_update_file(self):
+        with self.assertRaises(UserInputError):
+            self.service.update_audio_file("invalid file type", 34, {'s': 's'})
+
+    def test_invalid_audio_type_get_file(self):
+        with self.assertRaises(UserInputError):
+            self.service.get_file("invalid file type", 34)
